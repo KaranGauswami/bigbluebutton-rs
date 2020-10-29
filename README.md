@@ -1,4 +1,8 @@
-# bigbluebutton-rs
+# bigbluebutton-rs 
+
+[![Crates.io](https://img.shields.io/crates/v/bigbluebutton.svg)](https://crates.io/crates/bigbluebutton)
+[![Documentation](https://docs.rs/bigbluebutton/badge.svg)](https://docs.rs/bigbluebutton/)
+![build](https://github.com/KaranGauswami/bigbluebutton-rs/workflows/Rust/badge.svg)
 
 Rust crate for interacting with BBB APIs.
 
