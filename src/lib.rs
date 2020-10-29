@@ -1,7 +1,6 @@
-extern crate hex;
-
-use sha2::{Digest, Sha256};
 use std::collections::HashMap;
+
+mod helper;
 
 pub struct Bigbluebutton {
     salt: String,
@@ -13,27 +12,6 @@ impl Bigbluebutton {
         let mut api_url = url;
         api_url.push_str("api/");
         Self { salt, url: api_url }
-    }
-
-    /// hash function for converting to SHA-256
-    fn hash(payload: Vec<String>) -> String {
-        let mut hasher = Sha256::new();
-
-        hasher.update(payload.join(""));
-        let result = hasher.finalize();
-        let hash_value = result.as_slice();
-
-        hex::encode(hash_value)
-    }
-
-    /// serialize query parameters into query string
-    fn serialize_params(params: HashMap<String, String>) -> String {
-        let mut key_value = Vec::new();
-        for (key, value) in params {
-            key_value.push(format!("{}={}", key, value));
-        }
-        let serialized = key_value.join("&");
-        serialized
     }
 
     /// Generates BBB URL
