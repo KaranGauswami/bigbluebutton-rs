@@ -1,6 +1,6 @@
 # bigbluebutton-rs
 
-Rust Library for interacting with BBB APIs.
+Rust crate for interacting with BBB APIs.
 
 BigBlueButton is an open source web conferencing system for online learning.
 

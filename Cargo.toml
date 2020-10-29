@@ -3,7 +3,9 @@ name = "bigbluebutton"
 version = "0.1.0"
 authors = ["KaranGauswami <karangauswami.dev@gmail.com>"]
 edition = "2018"
-
+description= "Rust Crate for interacting with BBB APIs."
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KaranGauswami/bigbluebutton-rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
