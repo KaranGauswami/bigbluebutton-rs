@@ -14,7 +14,7 @@ use bigbluebutton::Bigbluebutton;
 
 // Creates new BBB Instance
 let bbb = Bigbluebutton::new(
-    "https://example.com/bigbluebutton/api/",
+    "https://example.com/bigbluebutton/",
     "BBBSECRET",
   );
 
