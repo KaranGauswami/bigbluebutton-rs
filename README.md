@@ -8,8 +8,8 @@ Rust crate for interacting with BBB APIs.
 
 BigBlueButton is an open source web conferencing system for online learning.
 
-This crate provides interface for interacting with Bigbluebutton APIs.
-More details can be found [here](https://docs.bigbluebutton.org/dev/api.html)
+This crate provides an interface for interacting with Bigbluebutton APIs.
+More details can be found [here](https://docs.bigbluebutton.org/dev/api.html).
 
 # Examples
 
