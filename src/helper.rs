@@ -1,7 +1,7 @@
 use crate::Bigbluebutton;
 use sha2::{Digest, Sha256};
 
-impl Bigbluebutton<'_> {
+impl Bigbluebutton {
     /// hash function for converting to SHA-256
     pub(crate) fn hash(payload: Vec<&str>) -> String {
         let mut hasher = Sha256::new();

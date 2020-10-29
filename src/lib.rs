@@ -10,7 +10,7 @@
 //!
 //! // Creates new BBB Instance
 //! let bbb = Bigbluebutton::new(
-//!     "https://example.com/bigbluebutton/api/",
+//!     "https://example.com/bigbluebutton/",
 //!     "BBBSECRET",
 //!  );
 //!
@@ -28,20 +28,25 @@ mod helper;
 // mod meeting;
 
 /// Implementation of Bigbluebutton APIs
-pub struct Bigbluebutton<'a> {
-    salt: &'a str,
-    url: &'a str,
+pub struct Bigbluebutton {
+    salt: String,
+    url: String,
 }
-impl<'a> Bigbluebutton<'a> {
+impl Bigbluebutton {
     /// creates new BBB API Client
-    pub fn new(url: &'a str, salt: &'a str) -> Self {
-        Self { salt, url }
+    pub fn new<'a>(url: &'a str, salt: &'a str) -> Self {
+        let mut new_url = url.to_string();
+        new_url.push_str("api/");
+        Self {
+            salt: salt.to_string(),
+            url: new_url,
+        }
     }
 
     /// Generates BBB URL with checksum to interact with BBB server
     pub fn generate_url(self, action: &str, params: Vec<(&str, &str)>) -> String {
         let query_params = self::Bigbluebutton::serialize_params(params);
-        let checksum = self::Bigbluebutton::hash(vec![action, &query_params, self.salt]);
+        let checksum = self::Bigbluebutton::hash(vec![action, &query_params, &self.salt]);
         format!(
             "{}{}?{}&checksum={}",
             self.url, action, query_params, checksum
@@ -55,7 +60,7 @@ mod test {
 
     #[test]
     fn generate_url() {
-        let bbb = Bigbluebutton::new("https://example.com/bigbluebutton/api/", "yourbbbsecret");
+        let bbb = Bigbluebutton::new("https://example.com/bigbluebutton/", "yourbbbsecret");
 
         let params = vec![
             ("password", "yourpassword"),
