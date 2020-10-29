@@ -17,6 +17,6 @@ impl Bigbluebutton {
             .iter()
             .map(|(key, value)| format!("{}={}", key, value))
             .collect();
-        collection.join("&").to_string()
+        collection.join("&")
     }
 }
