@@ -23,7 +23,7 @@
 //! let url = bbb.generate_url("join", params);
 //! # assert_eq!(url,"https://example.com/bigbluebutton/api/join?password=pass&fullName=name&meetingId=1&checksum=94e467c1b4b13f4452ca5d1deb9b7b74e1063aea55fe078139015a7d6311cfdf");
 //! println!("{}",url) // https://example.com/bigbluebutton/api/join?password=pass&fullName=name&meetingId=1&checksum=94e467c1b4b13f4452ca5d1deb9b7b74e1063aea55fe078139015a7d6311cfdf
-//!```
+//! ```
 mod helper;
 // mod meeting;
 
@@ -44,7 +44,7 @@ impl Bigbluebutton {
     }
 
     /// Generates BBB URL with checksum to interact with BBB server
-    pub fn generate_url(self, action: &str, params: Vec<(&str, &str)>) -> String {
+    pub fn generate_url(&self, action: &str, params: Vec<(&str, &str)>) -> String {
         let query_params = self::Bigbluebutton::serialize_params(params);
         let checksum = self::Bigbluebutton::hash(vec![action, &query_params, &self.salt]);
         format!(
