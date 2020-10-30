@@ -65,7 +65,7 @@ impl Bigbluebutton {
     }
 
     /// Generates BBB URL with checksum to interact with BBB server
-    pub fn generate_url(self, action: &str, params: Vec<(&str, &str)>) -> String {
+    pub fn generate_url(&self, action: &str, params: Vec<(&str, &str)>) -> String {
         let query_params = self::Bigbluebutton::serialize_params(params);
         let checksum = self::Bigbluebutton::hash(vec![action, &query_params, &self.salt]);
         format!(
