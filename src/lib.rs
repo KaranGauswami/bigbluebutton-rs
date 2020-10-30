@@ -25,10 +25,12 @@
 //! println!("{}",url) // https://example.com/bigbluebutton/api/join?password=pass&fullName=name&meetingId=1&checksum=94e467c1b4b13f4452ca5d1deb9b7b74e1063aea55fe078139015a7d6311cfdf
 //! ```
 
+/// Error Module
+pub mod error;
 mod helper;
 pub mod meeting;
 
-use meeting::GetApiName;
+use helper::GetApiName;
 use reqwest;
 use serde::Deserialize;
 
@@ -53,15 +55,21 @@ impl Bigbluebutton {
     where
         T: serde::Serialize + GetApiName,
     {
-        let action = request.get_query_params();
-        let query_params = serde_qs::to_string(request).unwrap();
-        let checksum = self::Bigbluebutton::hash(vec![action, &query_params, &self.salt]);
-        let url = format!(
-            "{}{}?{}&checksum={}",
-            self.url, action, query_params, checksum
-        );
+        let url = self.create_api_url(request);
         let response = reqwest::get(&url).await?.text().await?;
         Ok(())
+    }
+    fn create_api_url<T>(&self, request: &T) -> String
+    where
+        T: serde::Serialize + GetApiName,
+    {
+        let action = request.get_api_name();
+        let query_params = serde_qs::to_string(request).unwrap();
+        let checksum = self::Bigbluebutton::hash(vec![action, &query_params, &self.salt]);
+        format!(
+            "{}{}?{}&checksum={}",
+            self.url, action, query_params, checksum
+        )
     }
 
     /// Generates BBB URL with checksum to interact with BBB server

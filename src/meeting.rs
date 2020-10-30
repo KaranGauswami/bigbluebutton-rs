@@ -1,3 +1,5 @@
+use super::error::{BBBError, ErrorCode};
+use super::helper;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Default)]
@@ -104,6 +106,118 @@ pub struct CreateMeetingRequest {
     #[serde(skip)]
     api_name: String,
 }
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct CreateMeetingResponse {
+    #[serde(rename = "returncode")]
+    returncode: ErrorCode,
+
+    #[serde(rename = "meetingID")]
+    meeting_id: Option<String>,
+
+    #[serde(rename = "internalMeetingID")]
+    internal_meeting_id: Option<String>,
+
+    #[serde(rename = "parentMeetingID")]
+    parent_meeting_id: Option<String>,
+
+    #[serde(rename = "attendeePW")]
+    attendee_pw: Option<String>,
+
+    #[serde(rename = "moderatorPW")]
+    moderator_pw: Option<String>,
+
+    #[serde(rename = "createTime")]
+    create_time: Option<String>,
+
+    #[serde(rename = "voiceBridge")]
+    voice_bridge: Option<String>,
+
+    #[serde(rename = "dialNumber")]
+    dial_number: Option<String>,
+
+    #[serde(rename = "createDate")]
+    create_date: Option<String>,
+
+    #[serde(rename = "hasUserJoined")]
+    has_user_joined: Option<String>,
+
+    #[serde(rename = "duration")]
+    duration: Option<String>,
+
+    #[serde(rename = "hasBeenForciblyEnded")]
+    has_been_forcibly_ended: Option<String>,
+
+    #[serde(rename = "messageKey")]
+    message_key: Option<String>,
+
+    #[serde(rename = "message")]
+    message: Option<String>,
+}
+#[derive(Debug, Serialize, Deserialize, Default)]
+pub struct JoinMeetingRequest {
+    #[serde(rename = "fullName")]
+    pub full_name: Option<String>,
+
+    #[serde(rename = "meetingID")]
+    pub meeting_id: Option<String>,
+
+    #[serde(rename = "password")]
+    pub password: Option<String>,
+
+    #[serde(rename = "createTime")]
+    pub create_time: Option<String>,
+
+    #[serde(rename = "userID")]
+    pub user_id: Option<String>,
+
+    #[serde(rename = "webVoiceConf")]
+    pub web_voice_conf: Option<String>,
+
+    #[serde(rename = "configToken")]
+    pub config_token: Option<String>,
+
+    #[serde(rename = "defaultLayout")]
+    pub default_layout: Option<u64>,
+
+    #[serde(rename = "avatarURL")]
+    pub avatar_url: Option<String>,
+
+    redirect: bool,
+
+    #[serde(rename = "clientURL")]
+    pub client_url: Option<bool>,
+
+    #[serde(rename = "joinViaHtml5")]
+    pub join_via_html5: Option<u64>,
+
+    pub guest: Option<bool>,
+
+    #[serde(skip)]
+    api_name: String,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct JoinMeetingResponse {
+    #[serde(rename = "returncode")]
+    returncode: ErrorCode,
+
+    #[serde(rename = "messageKey")]
+    message_key: Option<String>,
+
+    message: Option<String>,
+
+    meeting_id: Option<String>,
+
+    user_id: Option<String>,
+
+    auth_token: Option<String>,
+
+    session_token: Option<String>,
+
+    url: Option<String>,
+}
+
 impl CreateMeetingRequest {
     pub fn new() -> Self {
         Self {
@@ -112,13 +226,58 @@ impl CreateMeetingRequest {
         }
     }
 }
-pub trait GetApiName {
-    fn get_query_params(&self) -> &str {
-        "Hello"
+impl JoinMeetingRequest {
+    pub fn new() -> Self {
+        Self {
+            api_name: "join".to_string(),
+            redirect: true,
+            ..Default::default()
+        }
     }
 }
-impl GetApiName for CreateMeetingRequest {
-    fn get_query_params(&self) -> &str {
+use super::Bigbluebutton;
+impl Bigbluebutton {
+    pub async fn create_meeting(
+        &self,
+        request: &CreateMeetingRequest,
+    ) -> Result<CreateMeetingResponse, BBBError> {
+        let url = self.create_api_url(request);
+        let text_response = reqwest::get(&url).await.unwrap().text().await.unwrap();
+        let return_response;
+        if text_response.contains("SUCCESS") {
+            return_response =
+                Ok(serde_xml_rs::from_str::<CreateMeetingResponse>(&text_response).unwrap());
+        } else {
+            return_response = Err(serde_xml_rs::from_str::<BBBError>(&text_response).unwrap());
+        }
+        return_response
+    }
+    pub async fn join_meeting(
+        &self,
+        request: &JoinMeetingRequest,
+    ) -> Result<JoinMeetingResponse, BBBError> {
+        let url = self.create_api_url(request);
+        println!("{:?}", url);
+        let text_response = reqwest::get(&url).await.unwrap().text().await.unwrap();
+        println!("{:?}", text_response);
+        let return_response;
+        if text_response.contains("SUCCESS") {
+            return_response =
+                Ok(serde_xml_rs::from_str::<JoinMeetingResponse>(&text_response).unwrap());
+        } else {
+            return_response = Err(serde_xml_rs::from_str::<BBBError>(&text_response).unwrap());
+        }
+        return_response
+    }
+}
+
+impl helper::GetApiName for CreateMeetingRequest {
+    fn get_api_name(&self) -> &str {
+        &self.api_name
+    }
+}
+impl helper::GetApiName for JoinMeetingRequest {
+    fn get_api_name(&self) -> &str {
         &self.api_name
     }
 }
