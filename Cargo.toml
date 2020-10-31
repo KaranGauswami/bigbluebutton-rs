@@ -16,3 +16,4 @@ serde_qs = "0.7.0"
 reqwest = "0.10.8"
 tokio= { version="0.2",features=["macros"] }
 serde-xml-rs = "0.4.0"
+async-trait = "0.1.41"

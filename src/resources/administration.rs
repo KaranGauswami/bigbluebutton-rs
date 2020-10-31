@@ -1,5 +1,7 @@
-use super::error::{BBBError, ErrorCode};
-use super::helper;
+use crate::error::{BBBError, ErrorCode};
+use crate::Bigbluebutton;
+use crate::{helper, Execute};
+use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Default)]
@@ -154,6 +156,7 @@ pub struct CreateMeetingResponse {
     #[serde(rename = "message")]
     message: Option<String>,
 }
+
 #[derive(Debug, Serialize, Deserialize, Default)]
 pub struct JoinMeetingRequest {
     #[serde(rename = "fullName")]
@@ -218,6 +221,26 @@ pub struct JoinMeetingResponse {
     url: Option<String>,
 }
 
+#[derive(Debug, Serialize, Deserialize, Default)]
+pub struct EndMeetingRequest {
+    #[serde(rename = "meetingID")]
+    pub meeting_id: Option<String>,
+    pub password: Option<String>,
+    api_name: String,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct EndMeetingResponse {
+    #[serde(rename = "returnCode")]
+    return_code: Option<String>,
+
+    #[serde(rename = "messageKey")]
+    message_key: Option<String>,
+
+    #[serde(rename = "message")]
+    message: Option<String>,
+}
+
 impl CreateMeetingRequest {
     pub fn new() -> Self {
         Self {
@@ -235,39 +258,12 @@ impl JoinMeetingRequest {
         }
     }
 }
-use super::Bigbluebutton;
-impl Bigbluebutton {
-    pub async fn create_meeting(
-        &self,
-        request: &CreateMeetingRequest,
-    ) -> Result<CreateMeetingResponse, BBBError> {
-        let url = self.create_api_url(request);
-        let text_response = reqwest::get(&url).await.unwrap().text().await.unwrap();
-        let return_response;
-        if text_response.contains("SUCCESS") {
-            return_response =
-                Ok(serde_xml_rs::from_str::<CreateMeetingResponse>(&text_response).unwrap());
-        } else {
-            return_response = Err(serde_xml_rs::from_str::<BBBError>(&text_response).unwrap());
+impl EndMeetingRequest {
+    pub fn new() -> Self {
+        Self {
+            api_name: "end".to_string(),
+            ..Default::default()
         }
-        return_response
-    }
-    pub async fn join_meeting(
-        &self,
-        request: &JoinMeetingRequest,
-    ) -> Result<JoinMeetingResponse, BBBError> {
-        let url = self.create_api_url(request);
-        println!("{:?}", url);
-        let text_response = reqwest::get(&url).await.unwrap().text().await.unwrap();
-        println!("{:?}", text_response);
-        let return_response;
-        if text_response.contains("SUCCESS") {
-            return_response =
-                Ok(serde_xml_rs::from_str::<JoinMeetingResponse>(&text_response).unwrap());
-        } else {
-            return_response = Err(serde_xml_rs::from_str::<BBBError>(&text_response).unwrap());
-        }
-        return_response
     }
 }
 
@@ -279,5 +275,34 @@ impl helper::GetApiName for CreateMeetingRequest {
 impl helper::GetApiName for JoinMeetingRequest {
     fn get_api_name(&self) -> &str {
         &self.api_name
+    }
+}
+impl helper::GetApiName for EndMeetingRequest {
+    fn get_api_name(&self) -> &str {
+        &self.api_name
+    }
+}
+
+#[async_trait]
+impl Execute<CreateMeetingRequest, CreateMeetingResponse> for Bigbluebutton {
+    async fn execute(
+        &self,
+        request: &CreateMeetingRequest,
+    ) -> Result<CreateMeetingResponse, BBBError> {
+        self.dispatch(request).await
+    }
+}
+
+#[async_trait]
+impl Execute<JoinMeetingRequest, JoinMeetingResponse> for Bigbluebutton {
+    async fn execute(&self, request: &JoinMeetingRequest) -> Result<JoinMeetingResponse, BBBError> {
+        self.dispatch(request).await
+    }
+}
+
+#[async_trait]
+impl Execute<EndMeetingRequest, EndMeetingResponse> for Bigbluebutton {
+    async fn execute(&self, request: &EndMeetingRequest) -> Result<EndMeetingResponse, BBBError> {
+        self.dispatch(request).await
     }
 }
