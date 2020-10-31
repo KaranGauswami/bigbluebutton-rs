@@ -13,6 +13,8 @@ More details can be found [here](https://docs.bigbluebutton.org/dev/api.html).
 
 # Examples
 
+## Gerenating API urls
+
 ```rust
 use bigbluebutton::Bigbluebutton;
 
@@ -31,6 +33,25 @@ let params = vec![
 let url = bbb.generate_url("join", params);
 
 println!("{}",url) // https://example.com/bigbluebutton/api/join?password=pass&fullName=name&meetingId=1&checksum=94e467c1b4b13f4452ca5d1deb9b7b74e1063aea55fe078139015a7d6311cfdf
+```
+
+## Creating Meeting
+
+```rust
+// creaing meeting
+use bigbluebutton::administration::CreateMeetingRequest;
+use bigbluebutton::{Bigbluebutton, Execute};
+
+#[tokio::main]
+async fn main() {
+    let bbb = Bigbluebutton::new("https://example.com/bigbluebutton/", "secret");
+    let mut request = CreateMeetingRequest::new();
+    request.meeting_id = Some("12".to_string());
+    request.moderator_pw = Some("modp".to_string());
+    request.attandee_pw = Some("akarr".to_string());
+
+    let _response = bbb.execute(&request).await;
+}
 ```
 
 # API Implementation status
