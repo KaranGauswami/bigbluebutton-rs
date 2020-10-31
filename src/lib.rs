@@ -32,7 +32,10 @@ mod resources;
 
 use async_trait::async_trait;
 use helper::GetApiName;
+#[cfg(feature = "administration")]
 pub use resources::administration;
+
+#[cfg(feature = "monitoring")]
 pub use resources::monitoring;
 
 /// Implementation of Bigbluebutton APIs
