@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Default)]
 /// Creates a BigBlueButton meeting.
+
 pub struct CreateMeetingRequest {
     #[serde(rename = "name")]
     /// A name for the meeting.
@@ -298,6 +299,15 @@ pub struct EndMeetingResponse {
 
 impl CreateMeetingRequest {
     /// Creates new CreateMeetingRequest
+    ///
+    /// ```rust
+    /// # use bigbluebutton::{Bigbluebutton,Execute};
+    /// use bigbluebutton::administration::CreateMeetingRequest;
+    /// let bbb = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
+    /// let mut request = CreateMeetingRequest::new();
+    /// request.meeting_id = Some("12".to_string());
+    /// bbb.execute(&request);
+    /// ```
     pub fn new() -> Self {
         Self {
             api_name: "create".to_string(),

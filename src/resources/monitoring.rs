@@ -213,7 +213,7 @@ pub struct GetMeetingInfoRequest {
 }
 
 #[derive(Debug, Serialize, Deserialize, Default, Clone)]
-/// Response return from [IsMeetingRunningRequest]
+/// Response return from [GetMeetingInfoRequest]
 pub struct GetMeetingInfoResponse {
     #[serde(rename = "returncode")]
     return_code: String,
