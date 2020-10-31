@@ -48,3 +48,12 @@ println!("{}",url) // https://example.com/bigbluebutton/api/join?password=pass&f
 - [x] isMeetingRunning
 - [x] getMeetings
 - [x] getMeetinInfo
+
+## Recording
+
+- [ ] getRecordings
+- [ ] publishRecordings
+- [ ] deleteRecordings
+- [ ] updateRecordings
+- [ ] getRecordingTextTracks
+- [ ] updateRecordings
