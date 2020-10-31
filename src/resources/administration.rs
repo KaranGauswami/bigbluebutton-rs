@@ -149,7 +149,7 @@ pub struct CreateMeetingRequest {
 /// Response return from [CreateMeetingRequest]
 pub struct CreateMeetingResponse {
     #[serde(rename = "returncode")]
-    returncode: ErrorCode,
+    return_code: ErrorCode,
 
     #[serde(rename = "meetingID")]
     meeting_id: Option<String>,
@@ -254,7 +254,7 @@ pub struct JoinMeetingRequest {
 /// Response return from [JoinMeetingRequest]
 pub struct JoinMeetingResponse {
     #[serde(rename = "returncode")]
-    returncode: ErrorCode,
+    return_code: ErrorCode,
 
     #[serde(rename = "messageKey")]
     message_key: Option<String>,
@@ -287,7 +287,7 @@ pub struct EndMeetingRequest {
 /// Response return from [EndMeetingRequest]
 pub struct EndMeetingResponse {
     #[serde(rename = "returnCode")]
-    return_code: Option<String>,
+    return_code: ErrorCode,
 
     #[serde(rename = "messageKey")]
     message_key: Option<String>,
