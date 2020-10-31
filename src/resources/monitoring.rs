@@ -5,14 +5,16 @@ use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Default)]
+/// This call enables you to simply check on whether or not a meeting is running by looking it up with your meeting ID.
 pub struct IsMeetingRunningRequest {
     #[serde(rename = "meetingID")]
+    /// The meeting ID that identifies the meeting you are attempting to check on.
     pub meeting_id: Option<String>,
-    pub password: Option<String>,
     api_name: String,
 }
 
 #[derive(Debug, Clone, Deserialize)]
+/// Response return from [IsMeetingRunningRequest]
 pub struct IsMeetingRunningResponse {
     #[serde(rename = "returnCode")]
     return_code: Option<String>,
@@ -20,6 +22,7 @@ pub struct IsMeetingRunningResponse {
     running: Option<String>,
 }
 impl IsMeetingRunningRequest {
+    /// Creates new IsMeetingRunningRequest
     pub fn new() -> Self {
         Self {
             api_name: "isMeetingRunning".to_string(),

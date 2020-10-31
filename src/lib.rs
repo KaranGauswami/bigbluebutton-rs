@@ -1,4 +1,4 @@
-// #![deny(missing_docs, rust_2018_idioms)]
+#![deny(missing_docs, rust_2018_idioms)]
 //! BigBlueButton is an open source web conferencing system for online learning.
 //!
 //! This crate provides interface for interacting with Bigbluebutton APIs.
@@ -96,7 +96,9 @@ impl Bigbluebutton {
 }
 
 #[async_trait]
+/// execute trait method for executing API requests
 pub trait Execute<T, E> {
+    /// trait function to execute requests
     async fn execute(&self, request: &T) -> Result<E, error::BBBError>;
 }
 
