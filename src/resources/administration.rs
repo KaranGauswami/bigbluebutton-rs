@@ -16,7 +16,7 @@ pub struct CreateMeetingRequest {
     /// A meeting ID that can be used to identify this meeting by the 3rd-party application.
     pub meeting_id: Option<String>,
 
-    #[serde(rename = "attandeePW")]
+    #[serde(rename = "attendeePW")]
     /// The password that the join URL can later provide as its password parameter to indicate the user will join as a viewer. If no attendeePW is provided, the create call will return a randomly generated attendeePW password for the meeting.
     pub attandee_pw: Option<String>,
 
