@@ -16,9 +16,9 @@ pub struct CreateMeetingRequest {
     /// A meeting ID that can be used to identify this meeting by the 3rd-party application.
     pub meeting_id: Option<String>,
 
-    #[serde(rename = "attandeePW")]
+    #[serde(rename = "attendeePW")]
     /// The password that the join URL can later provide as its password parameter to indicate the user will join as a viewer. If no attendeePW is provided, the create call will return a randomly generated attendeePW password for the meeting.
-    pub attandee_pw: Option<String>,
+    pub attendee_pw: Option<String>,
 
     #[serde(rename = "moderatorPW")]
     /// The password that will join URL can later provide as its password parameter to indicate the user will as a moderator. if no moderatorPW is provided, create will return a randomly generated moderatorPW password for the meeting.
@@ -183,7 +183,7 @@ pub struct CreateMeetingResponse {
     has_user_joined: Option<String>,
 
     #[serde(rename = "duration")]
-    duration: Option<String>,
+    duration: Option<u64>,
 
     #[serde(rename = "hasBeenForciblyEnded")]
     has_been_forcibly_ended: Option<String>,
@@ -287,7 +287,7 @@ pub struct EndMeetingRequest {
 #[derive(Debug, Clone, Deserialize)]
 /// Response return from [EndMeetingRequest]
 pub struct EndMeetingResponse {
-    #[serde(rename = "returnCode")]
+    #[serde(rename = "returncode")]
     return_code: ErrorCode,
 
     #[serde(rename = "messageKey")]
@@ -372,5 +372,81 @@ impl Execute<JoinMeetingRequest, JoinMeetingResponse> for Bigbluebutton {
 impl Execute<EndMeetingRequest, EndMeetingResponse> for Bigbluebutton {
     async fn execute(&self, request: &EndMeetingRequest) -> Result<EndMeetingResponse, BBBError> {
         self.dispatch(request).await
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::CreateMeetingRequest;
+    use super::{Bigbluebutton, Execute};
+    use std::env::var;
+    #[test]
+    #[ignore]
+    fn create_meeting() {
+        let bbb_url = var("BBB_URL").unwrap();
+        let bbb_secret = var("BBB_SECRET").unwrap();
+        let bbb = Bigbluebutton::new(&bbb_url, &bbb_secret);
+
+        let mut rt = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
+        rt.block_on(async {
+            let mut request = CreateMeetingRequest::new();
+
+            let meeting_id = "12".to_string();
+            let attendee_pw = "attendeep".to_string();
+            let moderator_pw = "modp".to_string();
+            let voice_bridge = "70757".to_string();
+            let dial_number = "70757".to_string();
+            let duration = 0;
+
+            request.meeting_id = Some(meeting_id.clone());
+            request.attendee_pw = Some(attendee_pw.clone());
+            request.moderator_pw = Some(moderator_pw.clone());
+            request.voice_bridge = Some(voice_bridge.clone());
+            request.dial_number = Some(dial_number.clone());
+            request.duration = Some(duration.clone());
+
+            let response = bbb.execute(&request).await.unwrap();
+            assert_eq!(response.meeting_id, Some(meeting_id));
+            assert_eq!(response.attendee_pw, Some(attendee_pw));
+            assert_eq!(response.moderator_pw, Some(moderator_pw));
+            assert_eq!(response.voice_bridge, Some(voice_bridge));
+            assert_eq!(response.dial_number, Some(dial_number));
+            assert_eq!(response.duration, Some(duration));
+            assert_ne!(response.duration, Some(12));
+        })
+    }
+
+    use super::EndMeetingRequest;
+
+    #[test]
+    #[ignore]
+    fn end_meeting() {
+        let bbb_url = var("BBB_URL").unwrap();
+        let bbb_secret = var("BBB_SECRET").unwrap();
+        let bbb = Bigbluebutton::new(&bbb_url, &bbb_secret);
+
+        let mut rt = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
+        rt.block_on(async {
+            let mut req = CreateMeetingRequest::new();
+            req.meeting_id = Some("12".to_string());
+            req.moderator_pw = Some("modp".to_string());
+            bbb.execute(&req).await;
+
+            let mut req = EndMeetingRequest::new();
+            req.meeting_id = Some("12".to_string());
+            req.password = Some("modp".to_string());
+
+            let response = bbb.execute(&req).await.unwrap();
+            println!("{:?}", response);
+            assert_eq!(response.return_code, crate::error::ErrorCode::SUCCESS);
+            assert_eq!(
+                response.message_key,
+                Some("sentEndMeetingRequest".to_string())
+            );
+            assert_eq!(
+                response.message_key,
+                Some("sentEndMeetingRequest".to_string())
+            );
+        })
     }
 }

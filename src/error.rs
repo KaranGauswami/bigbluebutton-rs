@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, PartialEq)]
 /// ErrorCode for BBB API
 pub enum ErrorCode {
     /// Success Response from BBB API
