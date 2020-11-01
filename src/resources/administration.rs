@@ -287,7 +287,7 @@ pub struct EndMeetingRequest {
 #[derive(Debug, Clone, Deserialize)]
 /// Response return from [EndMeetingRequest]
 pub struct EndMeetingResponse {
-    #[serde(rename = "returnCode")]
+    #[serde(rename = "returncode")]
     return_code: ErrorCode,
 
     #[serde(rename = "messageKey")]
