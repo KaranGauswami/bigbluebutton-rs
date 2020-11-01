@@ -449,4 +449,31 @@ mod test {
             );
         })
     }
+
+    use super::JoinMeetingRequest;
+
+    #[test]
+    #[ignore]
+    fn join_meeting() {
+        let bbb_url = var("BBB_URL").unwrap();
+        let bbb_secret = var("BBB_SECRET").unwrap();
+        let bbb = Bigbluebutton::new(&bbb_url, &bbb_secret);
+
+        let mut rt = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
+        rt.block_on(async {
+            let mut req = CreateMeetingRequest::new();
+            req.meeting_id = Some("12".to_string());
+            req.moderator_pw = Some("modp".to_string());
+            bbb.execute(&req).await;
+
+            let mut req = JoinMeetingRequest::new();
+            req.meeting_id = Some("12".to_string());
+            req.password = Some("modp".to_string());
+            req.full_name = Some("Karan Gauswami".to_string());
+
+            let response = bbb.execute(&req).await.unwrap();
+            assert_eq!(response.return_code, crate::error::ErrorCode::SUCCESS);
+            assert_eq!(response.message_key, Some("successfullyJoined".to_string()));
+        })
+    }
 }
