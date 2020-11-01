@@ -320,7 +320,7 @@ impl JoinMeetingRequest {
     pub fn new() -> Self {
         Self {
             api_name: "join".to_string(),
-            redirect: true,
+            redirect: false,
             ..Default::default()
         }
     }
