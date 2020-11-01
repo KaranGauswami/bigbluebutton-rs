@@ -443,10 +443,6 @@ mod test {
                 response.message_key,
                 Some("sentEndMeetingRequest".to_string())
             );
-            assert_eq!(
-                response.message_key,
-                Some("sentEndMeetingRequest".to_string())
-            );
         })
     }
 
