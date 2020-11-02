@@ -36,8 +36,7 @@
 //!     "https://example.com/bigbluebutton/",
 //!     "BBBSECRET",
 //!  );
-//!  let mut request = CreateMeetingRequest::new();
-//!  request.meeting_id = Some("12".to_string());
+//!  let mut request = CreateMeetingRequest::new("12");
 //!  bbb.execute(&request).await;
 //! }
 //! ```

@@ -1,4 +1,4 @@
-use crate::error::{BBBError, ErrorCode};
+use crate::error::{BBBError, ResponseCode};
 use crate::Bigbluebutton;
 use crate::{helper, Execute};
 use async_trait::async_trait;
@@ -14,7 +14,7 @@ pub struct CreateMeetingRequest {
 
     #[serde(rename = "meetingID")]
     /// A meeting ID that can be used to identify this meeting by the 3rd-party application.
-    pub meeting_id: Option<String>,
+    pub meeting_id: String,
 
     #[serde(rename = "attendeePW")]
     /// The password that the join URL can later provide as its password parameter to indicate the user will join as a viewer. If no attendeePW is provided, the create call will return a randomly generated attendeePW password for the meeting.
@@ -150,49 +150,49 @@ pub struct CreateMeetingRequest {
 /// Response return from [CreateMeetingRequest]
 pub struct CreateMeetingResponse {
     #[serde(rename = "returncode")]
-    return_code: ErrorCode,
+    return_code: ResponseCode,
 
     #[serde(rename = "meetingID")]
-    meeting_id: Option<String>,
+    meeting_id: String,
 
     #[serde(rename = "internalMeetingID")]
-    internal_meeting_id: Option<String>,
+    internal_meeting_id: String,
 
     #[serde(rename = "parentMeetingID")]
-    parent_meeting_id: Option<String>,
+    parent_meeting_id: String,
 
     #[serde(rename = "attendeePW")]
-    attendee_pw: Option<String>,
+    attendee_pw: String,
 
     #[serde(rename = "moderatorPW")]
-    moderator_pw: Option<String>,
+    moderator_pw: String,
 
     #[serde(rename = "createTime")]
-    create_time: Option<String>,
+    create_time: u64,
 
     #[serde(rename = "voiceBridge")]
-    voice_bridge: Option<String>,
+    voice_bridge: String,
 
     #[serde(rename = "dialNumber")]
-    dial_number: Option<String>,
+    dial_number: String,
 
     #[serde(rename = "createDate")]
-    create_date: Option<String>,
+    create_date: String,
 
     #[serde(rename = "hasUserJoined")]
-    has_user_joined: Option<String>,
+    has_user_joined: bool,
 
     #[serde(rename = "duration")]
-    duration: Option<u64>,
+    duration: u64,
 
     #[serde(rename = "hasBeenForciblyEnded")]
-    has_been_forcibly_ended: Option<String>,
+    has_been_forcibly_ended: bool,
 
     #[serde(rename = "messageKey")]
-    message_key: Option<String>,
+    message_key: String,
 
     #[serde(rename = "message")]
-    message: Option<String>,
+    message: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Default)]
@@ -200,15 +200,15 @@ pub struct CreateMeetingResponse {
 pub struct JoinMeetingRequest {
     #[serde(rename = "fullName")]
     /// The full name that is to be used to identify this user to other conference attendees.
-    pub full_name: Option<String>,
+    pub full_name: String,
 
     #[serde(rename = "meetingID")]
     /// The meeting ID that identifies the meeting you are attempting to join.
-    pub meeting_id: Option<String>,
+    pub meeting_id: String,
 
     #[serde(rename = "password")]
     /// The password that this attendee is using. If the moderator password is supplied, he will be given moderator status (and the same for attendee password, etc)
-    pub password: Option<String>,
+    pub password: String,
 
     #[serde(rename = "createTime")]
     /// Third-party apps using the API can now pass createTime parameter (which was created in the create call), BigBlueButton will ensure it matches the ‘createTime’ for the session. If they differ, BigBlueButton will not proceed with the join request. This prevents a user from reusing their join URL for a subsequent session with the same meetingID.
@@ -228,7 +228,7 @@ pub struct JoinMeetingRequest {
 
     #[serde(rename = "defaultLayout")]
     /// The layout name to be loaded first when the application is loaded.
-    pub default_layout: Option<u64>,
+    pub default_layout: Option<String>,
 
     #[serde(rename = "avatarURL")]
     /// The link for the user’s avatar to be displayed when displayAvatar in config.xml is set to true (not yet implemented in the HTML5 client, see [#8566](https://github.com/bigbluebutton/bigbluebutton/issues/8566).
@@ -255,22 +255,22 @@ pub struct JoinMeetingRequest {
 /// Response return from [JoinMeetingRequest]
 pub struct JoinMeetingResponse {
     #[serde(rename = "returncode")]
-    return_code: ErrorCode,
+    return_code: ResponseCode,
 
     #[serde(rename = "messageKey")]
-    message_key: Option<String>,
+    message_key: String,
 
-    message: Option<String>,
+    message: String,
 
-    meeting_id: Option<String>,
+    meeting_id: String,
 
-    user_id: Option<String>,
+    user_id: String,
 
-    auth_token: Option<String>,
+    auth_token: String,
 
-    session_token: Option<String>,
+    session_token: String,
 
-    url: Option<String>,
+    url: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Default)]
@@ -278,9 +278,9 @@ pub struct JoinMeetingResponse {
 pub struct EndMeetingRequest {
     #[serde(rename = "meetingID")]
     /// The meeting ID that identifies the meeting you are attempting to end.
-    pub meeting_id: Option<String>,
+    pub meeting_id: String,
     /// The moderator password for this meeting. You can not end a meeting using the attendee password.
-    pub password: Option<String>,
+    pub password: String,
     api_name: String,
 }
 
@@ -288,13 +288,13 @@ pub struct EndMeetingRequest {
 /// Response return from [EndMeetingRequest]
 pub struct EndMeetingResponse {
     #[serde(rename = "returncode")]
-    return_code: ErrorCode,
+    return_code: ResponseCode,
 
     #[serde(rename = "messageKey")]
-    message_key: Option<String>,
+    message_key: String,
 
     #[serde(rename = "message")]
-    message: Option<String>,
+    message: String,
 }
 
 impl CreateMeetingRequest {
@@ -304,12 +304,12 @@ impl CreateMeetingRequest {
     /// # use bigbluebutton::{Bigbluebutton,Execute};
     /// use bigbluebutton::administration::CreateMeetingRequest;
     /// let bbb = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
-    /// let mut request = CreateMeetingRequest::new();
-    /// request.meeting_id = Some("12".to_string());
+    /// let mut request = CreateMeetingRequest::new("12");
     /// bbb.execute(&request);
     /// ```
-    pub fn new() -> Self {
+    pub fn new(meeting_id: &str) -> Self {
         Self {
+            meeting_id: meeting_id.to_string(),
             api_name: "create".to_string(),
             ..Default::default()
         }
@@ -317,18 +317,31 @@ impl CreateMeetingRequest {
 }
 impl JoinMeetingRequest {
     /// creates new JoinMeetingRequest
-    pub fn new() -> Self {
+    ///
+    /// ```rust,no_run
+    /// # use bigbluebutton::{Bigbluebutton,Execute};
+    /// use bigbluebutton::administration::JoinMeetingRequest;
+    /// let bbb = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
+    /// let request =JoinMeetingRequest::new("Karan Gauswami","12","modp");
+    /// bbb.execute(&request);
+    /// ```
+    pub fn new(full_name: &str, meeting_id: &str, password: &str) -> Self {
         Self {
-            api_name: "join".to_string(),
+            full_name: full_name.to_string(),
+            meeting_id: meeting_id.to_string(),
+            password: password.to_string(),
             redirect: false,
+            api_name: "join".to_string(),
             ..Default::default()
         }
     }
 }
 impl EndMeetingRequest {
     /// creates new EndMeetingRequest
-    pub fn new() -> Self {
+    pub fn new(meeting_id: &str, password: &str) -> Self {
         Self {
+            meeting_id: meeting_id.to_string(),
+            password: password.to_string(),
             api_name: "end".to_string(),
             ..Default::default()
         }
@@ -389,16 +402,15 @@ mod test {
 
         let mut rt = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
         rt.block_on(async {
-            let mut request = CreateMeetingRequest::new();
-
-            let meeting_id = "12".to_string();
+            let meeting_id = "1".to_string();
             let attendee_pw = "attendeep".to_string();
             let moderator_pw = "modp".to_string();
             let voice_bridge = "70757".to_string();
             let dial_number = "70757".to_string();
             let duration = 0;
 
-            request.meeting_id = Some(meeting_id.clone());
+            let mut request = CreateMeetingRequest::new(&meeting_id);
+
             request.attendee_pw = Some(attendee_pw.clone());
             request.moderator_pw = Some(moderator_pw.clone());
             request.voice_bridge = Some(voice_bridge.clone());
@@ -406,13 +418,12 @@ mod test {
             request.duration = Some(duration.clone());
 
             let response = bbb.execute(&request).await.unwrap();
-            assert_eq!(response.meeting_id, Some(meeting_id));
-            assert_eq!(response.attendee_pw, Some(attendee_pw));
-            assert_eq!(response.moderator_pw, Some(moderator_pw));
-            assert_eq!(response.voice_bridge, Some(voice_bridge));
-            assert_eq!(response.dial_number, Some(dial_number));
-            assert_eq!(response.duration, Some(duration));
-            assert_ne!(response.duration, Some(12));
+            assert_eq!(response.meeting_id, meeting_id);
+            assert_eq!(response.attendee_pw, attendee_pw);
+            assert_eq!(response.moderator_pw, moderator_pw);
+            assert_eq!(response.voice_bridge, voice_bridge);
+            assert_eq!(response.dial_number, dial_number);
+            assert_eq!(response.duration, duration);
         })
     }
 
@@ -427,22 +438,16 @@ mod test {
 
         let mut rt = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
         rt.block_on(async {
-            let mut req = CreateMeetingRequest::new();
-            req.meeting_id = Some("12".to_string());
+            let mut req = CreateMeetingRequest::new("2");
             req.moderator_pw = Some("modp".to_string());
             bbb.execute(&req).await;
 
-            let mut req = EndMeetingRequest::new();
-            req.meeting_id = Some("12".to_string());
-            req.password = Some("modp".to_string());
+            let mut req = EndMeetingRequest::new("2", "modp");
 
             let response = bbb.execute(&req).await.unwrap();
             println!("{:?}", response);
-            assert_eq!(response.return_code, crate::error::ErrorCode::SUCCESS);
-            assert_eq!(
-                response.message_key,
-                Some("sentEndMeetingRequest".to_string())
-            );
+            assert_eq!(response.return_code, crate::error::ResponseCode::SUCCESS);
+            assert_eq!(response.message_key, "sentEndMeetingRequest".to_string());
         })
     }
 
@@ -457,19 +462,15 @@ mod test {
 
         let mut rt = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
         rt.block_on(async {
-            let mut req = CreateMeetingRequest::new();
-            req.meeting_id = Some("12".to_string());
+            let mut req = CreateMeetingRequest::new("3");
             req.moderator_pw = Some("modp".to_string());
             bbb.execute(&req).await;
 
-            let mut req = JoinMeetingRequest::new();
-            req.meeting_id = Some("12".to_string());
-            req.password = Some("modp".to_string());
-            req.full_name = Some("Karan Gauswami".to_string());
+            let mut req = JoinMeetingRequest::new("KaranGauswami", "3", "modp");
 
             let response = bbb.execute(&req).await.unwrap();
-            assert_eq!(response.return_code, crate::error::ErrorCode::SUCCESS);
-            assert_eq!(response.message_key, Some("successfullyJoined".to_string()));
+            assert_eq!(response.return_code, crate::error::ResponseCode::SUCCESS);
+            assert_eq!(response.message_key, "successfullyJoined".to_string());
         })
     }
 }

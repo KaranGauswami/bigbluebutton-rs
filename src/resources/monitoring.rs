@@ -1,4 +1,4 @@
-use crate::error::{BBBError, ErrorCode};
+use crate::error::{BBBError, ResponseCode};
 use crate::Bigbluebutton;
 use crate::{helper, Execute};
 use async_trait::async_trait;
@@ -18,7 +18,7 @@ pub struct IsMeetingRunningRequest {
 /// Response return from [IsMeetingRunningRequest]
 pub struct IsMeetingRunningResponse {
     #[serde(rename = "returncode")]
-    return_code: ErrorCode,
+    return_code: ResponseCode,
 
     running: Option<String>,
 }
@@ -165,7 +165,7 @@ pub struct Meeting {
 /// Response return from [GetMeetingsRequest]
 pub struct GetMeetingsResponse {
     #[serde(rename = "returncode")]
-    return_code: ErrorCode,
+    return_code: ResponseCode,
     #[serde(deserialize_with = "from_meeting")]
     meetings: Vec<Meeting>,
 }
