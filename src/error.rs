@@ -2,7 +2,7 @@ use serde::Deserialize;
 
 #[derive(Debug, Clone, Deserialize, PartialEq)]
 /// ErrorCode for BBB API
-pub enum ErrorCode {
+pub enum ResponseCode {
     /// Success Response from BBB API
     SUCCESS,
 
@@ -15,7 +15,7 @@ pub enum ErrorCode {
 pub struct BBBError {
     #[serde(rename = "returncode")]
     /// Return code for [ErrorCode]
-    return_code: ErrorCode,
+    return_code: ResponseCode,
 
     /// Error Message Key
     #[serde(rename = "messageKey")]
