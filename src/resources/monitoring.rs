@@ -28,7 +28,6 @@ impl IsMeetingRunningRequest {
         Self {
             meeting_id: meeting_id.to_string(),
             api_name: "isMeetingRunning".to_string(),
-            ..Default::default()
         }
     }
 }
@@ -186,7 +185,6 @@ impl GetMeetingsRequest {
     pub fn new() -> Self {
         Self {
             api_name: "getMeetings".to_string(),
-            ..Default::default()
         }
     }
 }

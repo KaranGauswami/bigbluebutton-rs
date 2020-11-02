@@ -343,7 +343,6 @@ impl EndMeetingRequest {
             meeting_id: meeting_id.to_string(),
             password: password.to_string(),
             api_name: "end".to_string(),
-            ..Default::default()
         }
     }
 }
