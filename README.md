@@ -68,7 +68,7 @@ async fn main() {
 
 - [x] isMeetingRunning
 - [x] getMeetings
-- [x] getMeetinInfo
+- [x] getMeetingsInfo
 
 ## Recording
 
