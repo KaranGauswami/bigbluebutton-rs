@@ -440,9 +440,9 @@ mod test {
         rt.block_on(async {
             let mut req = CreateMeetingRequest::new("2");
             req.moderator_pw = Some("modp".to_string());
-            bbb.execute(&req).await;
+            let _ = bbb.execute(&req).await;
 
-            let mut req = EndMeetingRequest::new("2", "modp");
+            let req = EndMeetingRequest::new("2", "modp");
 
             let response = bbb.execute(&req).await.unwrap();
             println!("{:?}", response);
@@ -464,9 +464,9 @@ mod test {
         rt.block_on(async {
             let mut req = CreateMeetingRequest::new("3");
             req.moderator_pw = Some("modp".to_string());
-            bbb.execute(&req).await;
+            let _ = bbb.execute(&req).await;
 
-            let mut req = JoinMeetingRequest::new("KaranGauswami", "3", "modp");
+            let req = JoinMeetingRequest::new("KaranGauswami", "3", "modp");
 
             let response = bbb.execute(&req).await.unwrap();
             assert_eq!(response.return_code, crate::error::ResponseCode::SUCCESS);

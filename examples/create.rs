@@ -11,9 +11,9 @@ async fn main() {
     request.moderator_pw = Some("modp".to_string());
     request.attendee_pw = Some("akarr".to_string());
 
-    let _response = bbb.execute(&request).await;
+    let _ = bbb.execute(&request).await;
 
-    let mut request = JoinMeetingRequest::new("Karan Gauswami", "12", "modp");
+    let request = JoinMeetingRequest::new("Karan Gauswami", "12", "modp");
 
     let response = bbb.execute(&request).await;
     println!("{:?}", response);

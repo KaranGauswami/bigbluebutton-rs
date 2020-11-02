@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 pub struct IsMeetingRunningRequest {
     #[serde(rename = "meetingID")]
     /// The meeting ID that identifies the meeting you are attempting to check on.
-    pub meeting_id: Option<String>,
+    meeting_id: String,
     api_name: String,
 }
 
@@ -24,8 +24,9 @@ pub struct IsMeetingRunningResponse {
 }
 impl IsMeetingRunningRequest {
     /// Creates new IsMeetingRunningRequest
-    pub fn new() -> Self {
+    pub fn new(meeting_id: &str) -> Self {
         Self {
+            meeting_id: meeting_id.to_string(),
             api_name: "isMeetingRunning".to_string(),
             ..Default::default()
         }
@@ -50,7 +51,6 @@ impl Execute<IsMeetingRunningRequest, IsMeetingRunningResponse> for Bigbluebutto
 #[derive(Debug, Serialize, Deserialize, Default)]
 /// This call will return a list of all the meetings found on this server.
 pub struct GetMeetingsRequest {
-    #[serde(rename = "meetingID")]
     api_name: String,
 }
 
