@@ -1,6 +1,5 @@
 use crate::error::{BBBError, ResponseCode};
-use crate::Bigbluebutton;
-use crate::{helper, Execute};
+use crate::{helper, Bigbluebutton, Execute};
 use async_trait::async_trait;
 use bbb_macro::ApiName;
 use helper::GetApiName;
@@ -20,9 +19,9 @@ pub struct IsMeetingRunningRequest {
 /// Response return from [IsMeetingRunningRequest]
 pub struct IsMeetingRunningResponse {
     #[serde(rename = "returncode")]
-    return_code: ResponseCode,
+    pub return_code: ResponseCode,
 
-    running: Option<String>,
+    pub running: Option<String>,
 }
 impl IsMeetingRunningRequest {
     /// Creates new IsMeetingRunningRequest
@@ -54,107 +53,107 @@ pub struct GetMeetingsRequest {
 /// Attendee Details
 pub struct Attendee {
     #[serde(rename = "userID")]
-    user_id: String,
+    pub user_id: String,
 
     #[serde(rename = "fullName")]
-    full_name: String,
+    pub full_name: String,
 
     #[serde(rename = "role")]
-    role: String,
+    pub role: String,
 
     #[serde(rename = "isPresenter")]
-    is_presenter: String,
+    pub is_presenter: String,
 
     #[serde(rename = "isListeningOnly")]
-    is_listening_only: bool,
+    pub is_listening_only: bool,
 
     #[serde(rename = "hasJoinedVoice")]
-    has_joined_voice: bool,
+    pub has_joined_voice: bool,
 
     #[serde(rename = "hasVideo")]
-    has_video: bool,
+    pub has_video: bool,
 
     #[serde(rename = "clientType")]
-    client_type: String,
+    pub client_type: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Default, Clone)]
 /// Meeting details
 pub struct Meeting {
     #[serde(rename = "meetingName")]
-    meeting_name: String,
+    pub meeting_name: String,
 
     #[serde(rename = "meetingID")]
-    meeting_id: String,
+    pub meeting_id: String,
 
     #[serde(rename = "internalMeetingID")]
-    internal_meeting_id: String,
+    pub internal_meeting_id: String,
 
     #[serde(rename = "createTime")]
-    create_time: String,
+    pub create_time: String,
 
     #[serde(rename = "createDate")]
-    create_date: String,
+    pub create_date: String,
 
     #[serde(rename = "voiceBridge")]
-    voice_bridge: String,
+    pub voice_bridge: String,
 
     #[serde(rename = "dialNumber")]
-    dial_number: String,
+    pub dial_number: String,
 
     #[serde(rename = "attendeePW")]
-    attendee_pw: String,
+    pub attendee_pw: String,
 
     #[serde(rename = "moderatorPW")]
-    moderator_pw: String,
+    pub moderator_pw: String,
 
     #[serde(rename = "running")]
-    running: String,
+    pub running: String,
 
     #[serde(rename = "duration")]
-    duration: String,
+    pub duration: String,
 
     #[serde(rename = "hasUserJoined")]
-    has_user_joined: String,
+    pub has_user_joined: String,
 
     recording: String,
 
     #[serde(rename = "hasBeenForciblyEnded")]
-    has_been_forcibly_ended: String,
+    pub has_been_forcibly_ended: String,
 
     #[serde(rename = "startTime")]
-    start_time: String,
+    pub start_time: String,
 
     #[serde(rename = "endTime")]
-    end_time: String,
+    pub end_time: String,
 
     #[serde(rename = "participantCount")]
-    participant_count: String,
+    pub participant_count: String,
 
     #[serde(rename = "listenerCount")]
-    listener_count: String,
+    pub listener_count: String,
 
     #[serde(rename = "voiceParticipantCount")]
-    voice_participant_count: String,
+    pub voice_participant_count: String,
 
     #[serde(rename = "videoCount")]
-    video_count: String,
+    pub video_count: String,
 
     #[serde(rename = "maxUsers")]
-    max_users: String,
+    pub max_users: String,
 
     #[serde(rename = "moderatorCount")]
-    moderator_count: String,
+    pub moderator_count: String,
 
     #[serde(rename = "attendees")]
     #[serde(deserialize_with = "from_attendee")]
-    attendees: Vec<Attendee>,
+    pub attendees: Vec<Attendee>,
 
     #[serde(rename = "metadata")]
-    metadata: String,
+    pub metadata: String,
 
     #[serde(rename = "isBreakout")]
-    is_breakout: String,
+    pub is_breakout: String,
 }
 
 #[derive(Debug, Clone, Deserialize)]

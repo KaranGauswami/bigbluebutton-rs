@@ -3,13 +3,11 @@ use crate::Bigbluebutton;
 use crate::{helper, Execute};
 use async_trait::async_trait;
 use bbb_macro::ApiName;
-use getset::{CopyGetters, Getters, MutGetters, Setters};
 use helper::GetApiName;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Default, ApiName)]
 /// Creates a BigBlueButton meeting.
-
 pub struct CreateMeetingRequest {
     #[serde(rename = "name")]
     /// A name for the meeting.
@@ -254,8 +252,7 @@ pub struct JoinMeetingRequest {
     api_name: String,
 }
 
-#[derive(Debug, Clone, Deserialize, Getters, CopyGetters, MutGetters, Setters)]
-#[getset(get = "pub")]
+#[derive(Debug, Clone, Deserialize)]
 /// Response return from [JoinMeetingRequest]
 pub struct JoinMeetingResponse {
     /// Return code
