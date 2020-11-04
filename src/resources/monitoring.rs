@@ -215,7 +215,7 @@ pub struct GetMeetingInfoRequest {
 pub struct GetMeetingInfoResponse {
     #[serde(rename = "returncode")]
     return_code: String,
-    // #[serde(deserialize_with = "from_meeting")]
+
     #[serde(rename = "meetingName")]
     meeting_name: String,
 
