@@ -4,6 +4,7 @@ use crate::{helper, Execute};
 use async_trait::async_trait;
 use bbb_macro::ApiName;
 use getset::{CopyGetters, Getters, MutGetters, Setters};
+use helper::GetApiName;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Default, ApiName)]
@@ -197,7 +198,7 @@ pub struct CreateMeetingResponse {
     pub message: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Serialize, Deserialize, Default, ApiName)]
 /// Joins a user to the meeting specified in the meetingID parameter.
 pub struct JoinMeetingRequest {
     #[serde(rename = "fullName")]
@@ -277,7 +278,7 @@ pub struct JoinMeetingResponse {
     pub url: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Serialize, Deserialize, Default, ApiName)]
 /// Use this to forcibly end a meeting and kick all participants out of the meeting.
 pub struct EndMeetingRequest {
     #[serde(rename = "meetingID")]
@@ -348,22 +349,6 @@ impl EndMeetingRequest {
             password: password.to_string(),
             api_name: "end".to_string(),
         }
-    }
-}
-
-impl helper::GetApiName for CreateMeetingRequest {
-    fn get_api_name(&self) -> &str {
-        &self.api_name
-    }
-}
-impl helper::GetApiName for JoinMeetingRequest {
-    fn get_api_name(&self) -> &str {
-        &self.api_name
-    }
-}
-impl helper::GetApiName for EndMeetingRequest {
-    fn get_api_name(&self) -> &str {
-        &self.api_name
     }
 }
 

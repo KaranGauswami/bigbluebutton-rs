@@ -1,0 +1,17 @@
+[package]
+name = "bbb-macro"
+version = "0.1.0"
+edition = "2018"
+autotests = false
+publish = false
+
+[lib]
+proc-macro = true
+
+
+[dev-dependencies]
+trybuild = { version = "1.0", features = ["diff"] }
+
+[dependencies]
+syn={version="1.0",features=["extra-traits"]}
+quote = "1.0"

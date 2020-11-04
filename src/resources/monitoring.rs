@@ -2,10 +2,12 @@ use crate::error::{BBBError, ResponseCode};
 use crate::Bigbluebutton;
 use crate::{helper, Execute};
 use async_trait::async_trait;
+use bbb_macro::ApiName;
+use helper::GetApiName;
 use serde::de::Deserializer;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Serialize, Deserialize, Default, ApiName)]
 /// This call enables you to simply check on whether or not a meeting is running by looking it up with your meeting ID.
 pub struct IsMeetingRunningRequest {
     #[serde(rename = "meetingID")]
@@ -32,11 +34,6 @@ impl IsMeetingRunningRequest {
     }
 }
 
-impl helper::GetApiName for IsMeetingRunningRequest {
-    fn get_api_name(&self) -> &str {
-        &self.api_name
-    }
-}
 #[async_trait]
 impl Execute<IsMeetingRunningRequest, IsMeetingRunningResponse> for Bigbluebutton {
     async fn execute(
@@ -47,7 +44,7 @@ impl Execute<IsMeetingRunningRequest, IsMeetingRunningResponse> for Bigbluebutto
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Serialize, Deserialize, Default, ApiName)]
 /// This call will return a list of all the meetings found on this server.
 pub struct GetMeetingsRequest {
     api_name: String,
@@ -189,11 +186,6 @@ impl GetMeetingsRequest {
     }
 }
 
-impl helper::GetApiName for GetMeetingsRequest {
-    fn get_api_name(&self) -> &str {
-        &self.api_name
-    }
-}
 #[async_trait]
 impl Execute<GetMeetingsRequest, GetMeetingsResponse> for Bigbluebutton {
     async fn execute(&self, request: &GetMeetingsRequest) -> Result<GetMeetingsResponse, BBBError> {
@@ -201,7 +193,7 @@ impl Execute<GetMeetingsRequest, GetMeetingsResponse> for Bigbluebutton {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Serialize, Deserialize, Default, ApiName)]
 /// This call will return all of a meeting’s information, including the list of attendees as well as start and end times.
 pub struct GetMeetingInfoRequest {
     #[serde(rename = "meetingID")]
@@ -313,11 +305,6 @@ impl GetMeetingInfoRequest {
     }
 }
 
-impl helper::GetApiName for GetMeetingInfoRequest {
-    fn get_api_name(&self) -> &str {
-        &self.api_name
-    }
-}
 #[async_trait]
 impl Execute<GetMeetingInfoRequest, GetMeetingInfoResponse> for Bigbluebutton {
     async fn execute(
