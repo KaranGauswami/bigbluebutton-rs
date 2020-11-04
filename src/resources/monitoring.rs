@@ -21,7 +21,7 @@ pub struct IsMeetingRunningResponse {
     #[serde(rename = "returncode")]
     pub return_code: ResponseCode,
 
-    pub running: Option<String>,
+    pub running: bool,
 }
 impl IsMeetingRunningRequest {
     /// Creates new IsMeetingRunningRequest
@@ -156,13 +156,13 @@ pub struct Meeting {
     pub is_breakout: String,
 }
 
-#[derive(Debug, Clone, Deserialize)]
 /// Response return from [GetMeetingsRequest]
+#[derive(Debug, Clone, Deserialize)]
 pub struct GetMeetingsResponse {
     #[serde(rename = "returncode")]
-    return_code: ResponseCode,
+    pub return_code: ResponseCode,
     #[serde(deserialize_with = "from_meeting")]
-    meetings: Vec<Meeting>,
+    pub meetings: Vec<Meeting>,
 }
 fn from_meeting<'de, D>(deserializer: D) -> Result<Vec<Meeting>, D::Error>
 where
@@ -170,11 +170,15 @@ where
 {
     #[derive(Debug, Deserialize)]
     struct MeetDetailsK {
-        meeting: Vec<Meeting>,
+        meeting: Option<Vec<Meeting>>,
     }
 
     let temp: MeetDetailsK = Deserialize::deserialize(deserializer)?;
-    Ok(temp.meeting)
+    if let Some(value) = temp.meeting {
+        Ok(value)
+    } else {
+        Ok(Vec::new())
+    }
 }
 impl GetMeetingsRequest {
     /// Creates new GetMeetingsRequest
@@ -205,82 +209,82 @@ pub struct GetMeetingInfoRequest {
 /// Response return from [GetMeetingInfoRequest]
 pub struct GetMeetingInfoResponse {
     #[serde(rename = "returncode")]
-    return_code: String,
+    pub return_code: String,
 
     #[serde(rename = "meetingName")]
-    meeting_name: String,
+    pub meeting_name: String,
 
     #[serde(rename = "meetingID")]
-    meeting_id: String,
+    pub meeting_id: String,
 
     #[serde(rename = "internalMeetingID")]
-    internal_meeting_id: String,
+    pub internal_meeting_id: String,
 
     #[serde(rename = "createTime")]
-    create_time: String,
+    pub create_time: String,
 
     #[serde(rename = "createDate")]
-    create_date: String,
+    pub create_date: String,
 
     #[serde(rename = "voiceBridge")]
-    voice_bridge: String,
+    pub voice_bridge: String,
 
     #[serde(rename = "dialNumber")]
-    dial_number: String,
+    pub dial_number: String,
 
     #[serde(rename = "attendeePW")]
-    attendee_pw: String,
+    pub attendee_pw: String,
 
     #[serde(rename = "moderatorPW")]
-    moderator_pw: String,
+    pub moderator_pw: String,
 
     #[serde(rename = "running")]
-    running: String,
+    pub running: String,
 
     #[serde(rename = "duration")]
-    duration: String,
+    pub duration: String,
 
     #[serde(rename = "hasUserJoined")]
-    has_user_joined: String,
+    pub has_user_joined: String,
 
     recording: String,
 
     #[serde(rename = "hasBeenForciblyEnded")]
-    has_been_forcibly_ended: String,
+    pub has_been_forcibly_ended: String,
 
     #[serde(rename = "startTime")]
-    start_time: String,
+    pub start_time: String,
 
     #[serde(rename = "endTime")]
-    end_time: String,
+    pub end_time: String,
 
     #[serde(rename = "participantCount")]
-    participant_count: String,
+    pub participant_count: String,
 
     #[serde(rename = "listenerCount")]
-    listener_count: String,
+    pub listener_count: String,
 
     #[serde(rename = "voiceParticipantCount")]
-    voice_participant_count: String,
+    pub voice_participant_count: String,
 
     #[serde(rename = "videoCount")]
-    video_count: String,
+    pub video_count: String,
 
     #[serde(rename = "maxUsers")]
-    max_users: String,
+    pub max_users: String,
 
     #[serde(rename = "moderatorCount")]
-    moderator_count: String,
+    pub moderator_count: String,
 
     #[serde(rename = "attendees")]
     #[serde(deserialize_with = "from_attendee")]
-    attendees: Vec<Attendee>,
+    pub attendees: Vec<Attendee>,
 
     #[serde(rename = "metadata")]
-    metadata: String,
+    pub metadata: String,
 
     #[serde(rename = "isBreakout")]
-    is_breakout: String,
+    pub is_breakout: String,
 }
 fn from_attendee<'de, D>(deserializer: D) -> Result<Vec<Attendee>, D::Error>
 where
@@ -288,11 +292,15 @@ where
 {
     #[derive(Debug, Deserialize)]
     struct AttendeDetailsK {
-        attendee: Vec<Attendee>,
+        attendee: Option<Vec<Attendee>>,
     }
 
     let temp: AttendeDetailsK = Deserialize::deserialize(deserializer)?;
-    Ok(temp.attendee)
+    if let Some(value) = temp.attendee {
+        Ok(value)
+    } else {
+        Ok(Vec::new())
+    }
 }
 impl GetMeetingInfoRequest {
     /// Creates new GetMeetingsRequest

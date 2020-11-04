@@ -15,6 +15,6 @@ async fn main() {
 
     let request = JoinMeetingRequest::new("Karan Gauswami", "12", "modp");
 
-    let response = bbb.execute(&request).await;
-    println!("{:?}", response);
+    let response = bbb.execute(&request).await.unwrap();
+    println!("{:?}", response.url);
 }
