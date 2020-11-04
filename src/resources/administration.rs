@@ -2,9 +2,12 @@ use crate::error::{BBBError, ResponseCode};
 use crate::Bigbluebutton;
 use crate::{helper, Execute};
 use async_trait::async_trait;
+use bbb_macro::ApiName;
+use getset::{CopyGetters, Getters, MutGetters, Setters};
+use helper::GetApiName;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Serialize, Deserialize, Default, ApiName)]
 /// Creates a BigBlueButton meeting.
 
 pub struct CreateMeetingRequest {
@@ -150,52 +153,52 @@ pub struct CreateMeetingRequest {
 /// Response return from [CreateMeetingRequest]
 pub struct CreateMeetingResponse {
     #[serde(rename = "returncode")]
-    return_code: ResponseCode,
+    pub return_code: ResponseCode,
 
     #[serde(rename = "meetingID")]
-    meeting_id: String,
+    pub meeting_id: String,
 
     #[serde(rename = "internalMeetingID")]
-    internal_meeting_id: String,
+    pub internal_meeting_id: String,
 
     #[serde(rename = "parentMeetingID")]
-    parent_meeting_id: String,
+    pub parent_meeting_id: String,
 
     #[serde(rename = "attendeePW")]
-    attendee_pw: String,
+    pub attendee_pw: String,
 
     #[serde(rename = "moderatorPW")]
-    moderator_pw: String,
+    pub moderator_pw: String,
 
     #[serde(rename = "createTime")]
-    create_time: u64,
+    pub create_time: u64,
 
     #[serde(rename = "voiceBridge")]
-    voice_bridge: String,
+    pub voice_bridge: String,
 
     #[serde(rename = "dialNumber")]
-    dial_number: String,
+    pub dial_number: String,
 
     #[serde(rename = "createDate")]
-    create_date: String,
+    pub create_date: String,
 
     #[serde(rename = "hasUserJoined")]
-    has_user_joined: bool,
+    pub has_user_joined: bool,
 
     #[serde(rename = "duration")]
-    duration: u64,
+    pub duration: u64,
 
     #[serde(rename = "hasBeenForciblyEnded")]
-    has_been_forcibly_ended: bool,
+    pub has_been_forcibly_ended: bool,
 
     #[serde(rename = "messageKey")]
-    message_key: String,
+    pub message_key: String,
 
     #[serde(rename = "message")]
-    message: String,
+    pub message: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Serialize, Deserialize, Default, ApiName)]
 /// Joins a user to the meeting specified in the meetingID parameter.
 pub struct JoinMeetingRequest {
     #[serde(rename = "fullName")]
@@ -251,29 +254,31 @@ pub struct JoinMeetingRequest {
     api_name: String,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Getters, CopyGetters, MutGetters, Setters)]
+#[getset(get = "pub")]
 /// Response return from [JoinMeetingRequest]
 pub struct JoinMeetingResponse {
+    /// Return code
     #[serde(rename = "returncode")]
-    return_code: ResponseCode,
+    pub return_code: ResponseCode,
 
     #[serde(rename = "messageKey")]
-    message_key: String,
+    pub message_key: String,
 
-    message: String,
+    pub message: String,
 
-    meeting_id: String,
+    pub meeting_id: String,
 
-    user_id: String,
+    pub user_id: String,
 
-    auth_token: String,
+    pub auth_token: String,
 
-    session_token: String,
+    pub session_token: String,
 
-    url: String,
+    pub url: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Serialize, Deserialize, Default, ApiName)]
 /// Use this to forcibly end a meeting and kick all participants out of the meeting.
 pub struct EndMeetingRequest {
     #[serde(rename = "meetingID")]
@@ -288,13 +293,13 @@ pub struct EndMeetingRequest {
 /// Response return from [EndMeetingRequest]
 pub struct EndMeetingResponse {
     #[serde(rename = "returncode")]
-    return_code: ResponseCode,
+    pub return_code: ResponseCode,
 
     #[serde(rename = "messageKey")]
-    message_key: String,
+    pub message_key: String,
 
     #[serde(rename = "message")]
-    message: String,
+    pub message: String,
 }
 
 impl CreateMeetingRequest {
@@ -347,22 +352,6 @@ impl EndMeetingRequest {
     }
 }
 
-impl helper::GetApiName for CreateMeetingRequest {
-    fn get_api_name(&self) -> &str {
-        &self.api_name
-    }
-}
-impl helper::GetApiName for JoinMeetingRequest {
-    fn get_api_name(&self) -> &str {
-        &self.api_name
-    }
-}
-impl helper::GetApiName for EndMeetingRequest {
-    fn get_api_name(&self) -> &str {
-        &self.api_name
-    }
-}
-
 #[async_trait]
 impl Execute<CreateMeetingRequest, CreateMeetingResponse> for Bigbluebutton {
     async fn execute(
@@ -384,92 +373,5 @@ impl Execute<JoinMeetingRequest, JoinMeetingResponse> for Bigbluebutton {
 impl Execute<EndMeetingRequest, EndMeetingResponse> for Bigbluebutton {
     async fn execute(&self, request: &EndMeetingRequest) -> Result<EndMeetingResponse, BBBError> {
         self.dispatch(request).await
-    }
-}
-
-#[cfg(test)]
-mod test {
-    use super::CreateMeetingRequest;
-    use super::{Bigbluebutton, Execute};
-    use std::env::var;
-    #[test]
-    #[ignore]
-    fn create_meeting() {
-        let bbb_url = var("BBB_URL").unwrap();
-        let bbb_secret = var("BBB_SECRET").unwrap();
-        let bbb = Bigbluebutton::new(&bbb_url, &bbb_secret);
-
-        let mut rt = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
-        rt.block_on(async {
-            let meeting_id = "1".to_string();
-            let attendee_pw = "attendeep".to_string();
-            let moderator_pw = "modp".to_string();
-            let voice_bridge = "70757".to_string();
-            let dial_number = "70757".to_string();
-            let duration = 0;
-
-            let mut request = CreateMeetingRequest::new(&meeting_id);
-
-            request.attendee_pw = Some(attendee_pw.clone());
-            request.moderator_pw = Some(moderator_pw.clone());
-            request.voice_bridge = Some(voice_bridge.clone());
-            request.dial_number = Some(dial_number.clone());
-            request.duration = Some(duration.clone());
-
-            let response = bbb.execute(&request).await.unwrap();
-            assert_eq!(response.meeting_id, meeting_id);
-            assert_eq!(response.attendee_pw, attendee_pw);
-            assert_eq!(response.moderator_pw, moderator_pw);
-            assert_eq!(response.voice_bridge, voice_bridge);
-            assert_eq!(response.dial_number, dial_number);
-            assert_eq!(response.duration, duration);
-        })
-    }
-
-    use super::EndMeetingRequest;
-
-    #[test]
-    #[ignore]
-    fn end_meeting() {
-        let bbb_url = var("BBB_URL").unwrap();
-        let bbb_secret = var("BBB_SECRET").unwrap();
-        let bbb = Bigbluebutton::new(&bbb_url, &bbb_secret);
-
-        let mut rt = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
-        rt.block_on(async {
-            let mut req = CreateMeetingRequest::new("2");
-            req.moderator_pw = Some("modp".to_string());
-            let _ = bbb.execute(&req).await;
-
-            let req = EndMeetingRequest::new("2", "modp");
-
-            let response = bbb.execute(&req).await.unwrap();
-            println!("{:?}", response);
-            assert_eq!(response.return_code, crate::error::ResponseCode::SUCCESS);
-            assert_eq!(response.message_key, "sentEndMeetingRequest".to_string());
-        })
-    }
-
-    use super::JoinMeetingRequest;
-
-    #[test]
-    #[ignore]
-    fn join_meeting() {
-        let bbb_url = var("BBB_URL").unwrap();
-        let bbb_secret = var("BBB_SECRET").unwrap();
-        let bbb = Bigbluebutton::new(&bbb_url, &bbb_secret);
-
-        let mut rt = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
-        rt.block_on(async {
-            let mut req = CreateMeetingRequest::new("3");
-            req.moderator_pw = Some("modp".to_string());
-            let _ = bbb.execute(&req).await;
-
-            let req = JoinMeetingRequest::new("KaranGauswami", "3", "modp");
-
-            let response = bbb.execute(&req).await.unwrap();
-            assert_eq!(response.return_code, crate::error::ResponseCode::SUCCESS);
-            assert_eq!(response.message_key, "successfullyJoined".to_string());
-        })
     }
 }
