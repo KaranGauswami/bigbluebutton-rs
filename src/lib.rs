@@ -70,17 +70,17 @@ impl Bigbluebutton {
         }
     }
 
-    fn create_api_url<T>(&self, request: &T) -> String
+    fn create_api_url<T>(&self, request: &T) -> anyhow::Result<String>
     where
         T: serde::Serialize + GetApiName,
     {
         let action = request.get_api_name();
-        let query_params = serde_qs::to_string(request).unwrap();
+        let query_params = serde_qs::to_string(request)?;
         let checksum = self::Bigbluebutton::hash(vec![action, &query_params, &self.salt]);
-        format!(
+        Ok(format!(
             "{}{}?{}&checksum={}",
             self.url, action, query_params, checksum
-        )
+        ))
     }
 
     /// Generates BBB URL with checksum to interact with BBB server
@@ -93,19 +93,19 @@ impl Bigbluebutton {
         )
     }
 
-    pub(crate) async fn dispatch<'a, R, T>(&self, request: &R) -> Result<T, self::error::BBBError>
+    pub(crate) async fn dispatch<'a, R, T>(&self, request: &R) -> anyhow::Result<T>
     where
         R: GetApiName + serde::Serialize,
         T: serde::Deserialize<'a>,
     {
-        let url = self.create_api_url(request);
-        let text_response = reqwest::get(&url).await.unwrap().text().await.unwrap();
+        let url = self.create_api_url(request)?;
+        let text_response = reqwest::get(&url).await?.text().await?;
         let return_response;
         if text_response.contains("SUCCESS") {
-            return_response = Ok(serde_xml_rs::from_str::<T>(&text_response).unwrap());
+            return_response = Ok(serde_xml_rs::from_str::<T>(&text_response)?);
         } else {
-            return_response =
-                Err(serde_xml_rs::from_str::<self::error::BBBError>(&text_response).unwrap());
+            let error = serde_xml_rs::from_str::<self::error::BBBError>(&text_response)?;
+            return_response = Err(anyhow::anyhow!("Error: {}", error.message));
         }
         return_response
     }
@@ -115,7 +115,7 @@ impl Bigbluebutton {
 /// execute trait method for executing API requests
 pub trait Execute<T, E> {
     /// trait function to execute requests
-    async fn execute(&self, request: &T) -> Result<E, error::BBBError>;
+    async fn execute(&self, request: &T) -> Result<E, anyhow::Error>;
 }
 
 #[cfg(test)]

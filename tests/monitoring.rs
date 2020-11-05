@@ -1,11 +1,10 @@
 #[cfg(test)]
 mod test {
-    use bigbluebutton::administration::{CreateMeetingRequest, EndMeetingRequest};
+    use bigbluebutton::administration::CreateMeetingRequest;
     use bigbluebutton::monitoring::{
         GetMeetingInfoRequest, GetMeetingsRequest, IsMeetingRunningRequest,
     };
     use bigbluebutton::{Bigbluebutton, Execute};
-    use std::env::var;
 
     #[test]
     #[ignore]
@@ -50,7 +49,7 @@ mod test {
             let _ = bbb.execute(&request).await;
             let _ = bbb.execute(&request2).await;
 
-            let mut request = GetMeetingsRequest::new();
+            let request = GetMeetingsRequest::new();
 
             let response = bbb.execute(&request).await.unwrap();
             assert_ne!(response.meetings.len(), 0);

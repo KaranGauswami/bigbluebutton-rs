@@ -15,12 +15,12 @@ pub enum ResponseCode {
 pub struct BBBError {
     #[serde(rename = "returncode")]
     /// Return code for [ErrorCode]
-    return_code: ResponseCode,
+    pub return_code: ResponseCode,
 
     /// Error Message Key
     #[serde(rename = "messageKey")]
-    message_key: String,
+    pub message_key: String,
 
     /// Error Message
-    message: String,
+    pub message: String,
 }

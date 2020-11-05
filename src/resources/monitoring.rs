@@ -1,4 +1,4 @@
-use crate::error::{BBBError, ResponseCode};
+use crate::error::ResponseCode;
 use crate::{helper, Bigbluebutton, Execute};
 use async_trait::async_trait;
 use bbb_macro::ApiName;
@@ -38,7 +38,7 @@ impl Execute<IsMeetingRunningRequest, IsMeetingRunningResponse> for Bigbluebutto
     async fn execute(
         &self,
         request: &IsMeetingRunningRequest,
-    ) -> Result<IsMeetingRunningResponse, BBBError> {
+    ) -> anyhow::Result<IsMeetingRunningResponse> {
         self.dispatch(request).await
     }
 }
@@ -191,7 +191,10 @@ impl GetMeetingsRequest {
 
 #[async_trait]
 impl Execute<GetMeetingsRequest, GetMeetingsResponse> for Bigbluebutton {
-    async fn execute(&self, request: &GetMeetingsRequest) -> Result<GetMeetingsResponse, BBBError> {
+    async fn execute(
+        &self,
+        request: &GetMeetingsRequest,
+    ) -> Result<GetMeetingsResponse, anyhow::Error> {
         self.dispatch(request).await
     }
 }
@@ -317,7 +320,7 @@ impl Execute<GetMeetingInfoRequest, GetMeetingInfoResponse> for Bigbluebutton {
     async fn execute(
         &self,
         request: &GetMeetingInfoRequest,
-    ) -> Result<GetMeetingInfoResponse, BBBError> {
+    ) -> Result<GetMeetingInfoResponse, anyhow::Error> {
         self.dispatch(request).await
     }
 }

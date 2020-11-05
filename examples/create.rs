@@ -3,7 +3,7 @@ use bigbluebutton::administration::{CreateMeetingRequest, JoinMeetingRequest};
 use bigbluebutton::{Bigbluebutton, Execute};
 
 #[tokio::main]
-async fn main() {
+async fn main() -> anyhow::Result<()> {
     let bbb_url = std::env::var("BBB_URL").expect("BBB_URL is not set");
     let bbb_secret = std::env::var("BBB_SECRET").expect("BBB_SECRET is not set");
     let bbb = Bigbluebutton::new(&bbb_url, &bbb_secret);
@@ -15,6 +15,7 @@ async fn main() {
 
     let request = JoinMeetingRequest::new("Karan Gauswami", "12", "modp");
 
-    let response = bbb.execute(&request).await.unwrap();
+    let response = bbb.execute(&request).await?;
     println!("{:?}", response.url);
+    Ok(())
 }

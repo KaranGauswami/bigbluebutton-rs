@@ -1,4 +1,4 @@
-use crate::error::{BBBError, ResponseCode};
+use crate::error::ResponseCode;
 use crate::Bigbluebutton;
 use crate::{helper, Execute};
 use async_trait::async_trait;
@@ -354,21 +354,21 @@ impl Execute<CreateMeetingRequest, CreateMeetingResponse> for Bigbluebutton {
     async fn execute(
         &self,
         request: &CreateMeetingRequest,
-    ) -> Result<CreateMeetingResponse, BBBError> {
+    ) -> anyhow::Result<CreateMeetingResponse> {
         self.dispatch(request).await
     }
 }
 
 #[async_trait]
 impl Execute<JoinMeetingRequest, JoinMeetingResponse> for Bigbluebutton {
-    async fn execute(&self, request: &JoinMeetingRequest) -> Result<JoinMeetingResponse, BBBError> {
+    async fn execute(&self, request: &JoinMeetingRequest) -> anyhow::Result<JoinMeetingResponse> {
         self.dispatch(request).await
     }
 }
 
 #[async_trait]
 impl Execute<EndMeetingRequest, EndMeetingResponse> for Bigbluebutton {
-    async fn execute(&self, request: &EndMeetingRequest) -> Result<EndMeetingResponse, BBBError> {
+    async fn execute(&self, request: &EndMeetingRequest) -> anyhow::Result<EndMeetingResponse> {
         self.dispatch(request).await
     }
 }

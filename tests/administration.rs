@@ -37,7 +37,7 @@ mod test {
             assert_eq!(response.voice_bridge, voice_bridge);
             assert_eq!(response.dial_number, dial_number);
             assert_eq!(response.duration, duration);
-        })
+        });
     }
 
     #[test]
