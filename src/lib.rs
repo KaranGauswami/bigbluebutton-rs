@@ -105,7 +105,7 @@ impl Bigbluebutton {
             return_response = Ok(serde_xml_rs::from_str::<T>(&text_response)?);
         } else {
             let error = serde_xml_rs::from_str::<self::error::BBBError>(&text_response)?;
-            return_response = Err(anyhow::anyhow!("Error: {}", error.message));
+            return_response = Err(anyhow::anyhow!("{}", error.message));
         }
         return_response
     }
