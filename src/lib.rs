@@ -61,7 +61,7 @@ pub struct Bigbluebutton {
 }
 impl Bigbluebutton {
     /// creates new BBB API Client
-    pub fn new<'a>(url: &'a str, salt: &'a str) -> Self {
+    pub fn new(url: impl ToString, salt: impl ToString) -> Self {
         let mut new_url = url.to_string();
         new_url.push_str("api/");
         Self {

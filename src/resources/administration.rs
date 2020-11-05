@@ -309,7 +309,7 @@ impl CreateMeetingRequest {
     /// let mut request = CreateMeetingRequest::new("12");
     /// bbb.execute(&request);
     /// ```
-    pub fn new(meeting_id: &str) -> Self {
+    pub fn new(meeting_id: impl ToString) -> Self {
         Self {
             meeting_id: meeting_id.to_string(),
             api_name: "create".to_string(),
@@ -327,7 +327,10 @@ impl JoinMeetingRequest {
     /// let request =JoinMeetingRequest::new("Karan Gauswami","12","modp");
     /// bbb.execute(&request);
     /// ```
-    pub fn new(full_name: &str, meeting_id: &str, password: &str) -> Self {
+    pub fn new<T>(full_name: T, meeting_id: T, password: T) -> Self
+    where
+        T: ToString,
+    {
         Self {
             full_name: full_name.to_string(),
             meeting_id: meeting_id.to_string(),
@@ -340,7 +343,7 @@ impl JoinMeetingRequest {
 }
 impl EndMeetingRequest {
     /// creates new EndMeetingRequest
-    pub fn new(meeting_id: &str, password: &str) -> Self {
+    pub fn new(meeting_id: impl ToString, password: impl ToString) -> Self {
         Self {
             meeting_id: meeting_id.to_string(),
             password: password.to_string(),

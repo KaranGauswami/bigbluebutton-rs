@@ -25,7 +25,7 @@ pub struct IsMeetingRunningResponse {
 }
 impl IsMeetingRunningRequest {
     /// Creates new IsMeetingRunningRequest
-    pub fn new(meeting_id: &str) -> Self {
+    pub fn new(meeting_id: impl ToString) -> Self {
         Self {
             meeting_id: meeting_id.to_string(),
             api_name: "isMeetingRunning".to_string(),
