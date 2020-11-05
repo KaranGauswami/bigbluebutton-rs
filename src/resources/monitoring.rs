@@ -191,10 +191,7 @@ impl GetMeetingsRequest {
 
 #[async_trait]
 impl Execute<GetMeetingsRequest, GetMeetingsResponse> for Bigbluebutton {
-    async fn execute(
-        &self,
-        request: &GetMeetingsRequest,
-    ) -> Result<GetMeetingsResponse, anyhow::Error> {
+    async fn execute(&self, request: &GetMeetingsRequest) -> anyhow::Result<GetMeetingsResponse> {
         self.dispatch(request).await
     }
 }
@@ -320,7 +317,7 @@ impl Execute<GetMeetingInfoRequest, GetMeetingInfoResponse> for Bigbluebutton {
     async fn execute(
         &self,
         request: &GetMeetingInfoRequest,
-    ) -> Result<GetMeetingInfoResponse, anyhow::Error> {
+    ) -> anyhow::Result<GetMeetingInfoResponse> {
         self.dispatch(request).await
     }
 }

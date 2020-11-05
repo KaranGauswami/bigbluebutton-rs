@@ -115,7 +115,7 @@ impl Bigbluebutton {
 /// execute trait method for executing API requests
 pub trait Execute<T, E> {
     /// trait function to execute requests
-    async fn execute(&self, request: &T) -> Result<E, anyhow::Error>;
+    async fn execute(&self, request: &T) -> anyhow::Result<E>;
 }
 
 #[cfg(test)]
