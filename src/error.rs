@@ -14,7 +14,7 @@ pub enum ResponseCode {
 /// Custom error type for API Requests
 pub struct BBBError {
     #[serde(rename = "returncode")]
-    /// Return code for [ErrorCode]
+    /// Return code for [ResponseCode]
     pub return_code: ResponseCode,
 
     /// Error Message Key
