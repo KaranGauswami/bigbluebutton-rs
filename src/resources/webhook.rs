@@ -121,7 +121,7 @@ impl DestroyHookRequest {
 
 #[async_trait]
 impl Execute<DestroyHookRequest, DestroyHookResponse> for Bigbluebutton {
-    async fn execute(&self, request: &DestoryHookRequest) -> anyhow::Result<DestroyHookResponse> {
+    async fn execute(&self, request: &DestroyHookRequest) -> anyhow::Result<DestroyHookResponse> {
         self.dispatch(request).await
     }
 }

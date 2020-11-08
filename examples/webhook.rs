@@ -17,9 +17,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("{:?}", response.message_key());
     println!("{:?}", response.message());
 
-    let mut request = DestroyHookRequest::new("24");
+    let mut request = DestroyHookRequest::new(response.hook_id());
 
     let response = bbb.execute(&request).await?;
 
+    println!("{:?}", response.return_code());
+    println!("{:?}", response.removed());
     Ok(())
 }
