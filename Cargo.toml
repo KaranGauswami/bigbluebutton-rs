@@ -36,3 +36,7 @@ members = ["bbb-macro"]
 [[example]]
 name = "webhook"
 required-features = ["webhook"]
+
+[[example]]
+name = "recording"
+required-features = ["recording"]

@@ -1,9 +1,7 @@
 #[cfg(test)]
 mod test {
     use bigbluebutton::administration::CreateMeetingRequest;
-    use bigbluebutton::monitoring::{
-        GetMeetingInfoRequest, GetMeetingsRequest, IsMeetingRunningRequest,
-    };
+    use bigbluebutton::monitoring::{GetMeetingInfoRequest, GetMeetingsRequest};
     use bigbluebutton::{Bigbluebutton, Execute};
 
     #[test]

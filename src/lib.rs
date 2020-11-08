@@ -22,7 +22,6 @@
 //! ];
 //!
 //! let url = bbb.generate_url("join", params);
-//! # assert_eq!(url,"https://example.com/bigbluebutton/api/join?password=pass&fullName=name&meetingId=1&checksum=94e467c1b4b13f4452ca5d1deb9b7b74e1063aea55fe078139015a7d6311cfdf");
 //! println!("{}",url) // https://example.com/bigbluebutton/api/join?password=pass&fullName=name&meetingId=1&checksum=94e467c1b4b13f4452ca5d1deb9b7b74e1063aea55fe078139015a7d6311cfdf
 //! ```
 //! - Creating Meeting
@@ -124,23 +123,4 @@ impl Bigbluebutton {
 pub trait Execute<T, E> {
     /// trait function to execute requests
     async fn execute(&self, request: &T) -> anyhow::Result<E>;
-}
-
-#[cfg(test)]
-mod test {
-    use super::Bigbluebutton;
-
-    #[test]
-    fn generate_url() {
-        let bbb = Bigbluebutton::new("https://example.com/bigbluebutton/", "yourbbbsecret");
-
-        let params = vec![
-            ("password", "yourpassword"),
-            ("fullName", "fullname"),
-            ("meetingID", "127"),
-        ];
-
-        let url = bbb.generate_url("join", params);
-        assert_eq!(url,"https://example.com/bigbluebutton/api/join?password=yourpassword&fullName=fullname&meetingID=127&checksum=40799bd174680c4613a512cb000eee0bb9beafe1bcb1d380b23c0720e5d0f609");
-    }
 }
