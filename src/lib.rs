@@ -40,7 +40,7 @@
 //! }
 //! ```
 
-/// Error Module
+#[doc(hidden)]
 pub mod error;
 mod helper;
 mod resources;

@@ -1,8 +1,6 @@
 #![allow(unused_variables)]
 // Create Meeting Example
-use bigbluebutton::recording::{
-    DeleteRecordingsRequest, PublishRecordingsRequest, PublishRecordingsResponse,
-};
+use bigbluebutton::recording::{DeleteRecordingsRequest, PublishRecordingsRequest};
 use bigbluebutton::{Bigbluebutton, Execute};
 
 #[tokio::main]

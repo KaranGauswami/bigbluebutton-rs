@@ -26,8 +26,10 @@ pub struct PublishRecordingsRequest {
 /// Response return from [PublishRecordingsResponse]
 pub struct PublishRecordingsResponse {
     #[serde(rename = "returncode")]
+    /// return code
     return_code: ResponseCode,
 
+    /// published status of recording
     published: bool,
 }
 impl PublishRecordingsRequest {
@@ -77,8 +79,10 @@ pub struct DeleteRecordingsRequest {
 /// Response return from [DeleteRecordingsRequest]
 pub struct DeleteRecordingsResponse {
     #[serde(rename = "returncode")]
+    /// return code
     return_code: ResponseCode,
 
+    /// whether recording is deleted or not
     deleted: bool,
 }
 impl DeleteRecordingsRequest {
