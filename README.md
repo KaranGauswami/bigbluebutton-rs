@@ -78,3 +78,9 @@ async fn main() {
 - [ ] updateRecordings
 - [ ] getRecordingTextTracks
 - [ ] updateRecordings
+
+## Webhooks
+
+- [x] Hooks/Create
+- [x] Hooks/Destroy
+- [x] Hooks/List
