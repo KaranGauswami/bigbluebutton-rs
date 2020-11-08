@@ -117,7 +117,6 @@ impl DestroyHookRequest {
         Self {
             hook_id: hook_id.to_string(),
             api_name: "hooks/destroy".to_string(),
-            ..Default::default()
         }
     }
 }
