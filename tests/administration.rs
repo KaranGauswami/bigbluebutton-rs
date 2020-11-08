@@ -31,12 +31,12 @@ mod test {
             request.duration = Some(duration.clone());
 
             let response = bbb.execute(&request).await.unwrap();
-            assert_eq!(response.meeting_id, meeting_id);
-            assert_eq!(response.attendee_pw, attendee_pw);
-            assert_eq!(response.moderator_pw, moderator_pw);
-            assert_eq!(response.voice_bridge, voice_bridge);
-            assert_eq!(response.dial_number, dial_number);
-            assert_eq!(response.duration, duration);
+            assert_eq!(response.meeting_id(), &meeting_id);
+            assert_eq!(response.attendee_pw(), &attendee_pw);
+            assert_eq!(response.moderator_pw(), &moderator_pw);
+            assert_eq!(response.voice_bridge(), &voice_bridge);
+            assert_eq!(response.dial_number(), &dial_number);
+            assert_eq!(response.duration(), &duration);
         });
     }
 

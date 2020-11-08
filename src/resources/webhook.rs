@@ -31,9 +31,6 @@ pub struct CreateHookRequest {
 #[getset(get = "pub")]
 /// Response return from [CreateHookRequest]
 pub struct CreateHookResponse {
-    /// return code of meeting
-    /// ```
-    /// ```
     #[serde(rename = "returncode")]
     return_code: ResponseCode,
 
@@ -55,12 +52,12 @@ pub struct CreateHookResponse {
 impl CreateHookRequest {
     /// Creates new CreateHookRequest
     ///
-    /// ```rust
+    /// ```rust,no_run
     /// # use bigbluebutton::{Bigbluebutton,Execute};
     /// use bigbluebutton::webhook::CreateHookRequest;
     /// let bbb = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
-    /// //let mut request = CreateHookRequest::new("12");
-    /// //bbb.execute(&request);
+    /// let mut request = CreateHookRequest::new("http://example.com/callback");
+    /// bbb.execute(&request);
     /// ```
     pub fn new(callback_url: impl ToString) -> Self {
         Self {
@@ -102,14 +99,14 @@ pub struct DestroyHookResponse {
     removed: bool,
 }
 impl DestroyHookRequest {
-    /// Creates new DestoryHookRequest
+    /// Creates new DestroyHookRequest
     ///
     /// ```rust
     /// # use bigbluebutton::{Bigbluebutton,Execute};
-    /// use bigbluebutton::webhook::DestoryHookRequest;
+    /// use bigbluebutton::webhook::DestroyHookRequest;
     /// let bbb = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
-    /// //let mut request = CreateHookRequest::new("12");
-    /// //bbb.execute(&request);
+    /// let mut request = DestroyHookRequest::new("12");
+    /// bbb.execute(&request);
     /// ```
     pub fn new(hook_id: impl ToString) -> Self {
         Self {
@@ -190,10 +187,10 @@ impl ListHooksRequest {
     ///
     /// ```rust
     /// # use bigbluebutton::{Bigbluebutton,Execute};
-    /// use bigbluebutton::webhook::DestoryHookRequest;
+    /// use bigbluebutton::webhook::ListHooksRequest;
     /// let bbb = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
-    /// //let mut request = CreateHookRequest::new("12");
-    /// //bbb.execute(&request);
+    /// let mut request = ListHooksRequest::new();
+    /// bbb.execute(&request);
     /// ```
     pub fn new() -> Self {
         Self {
