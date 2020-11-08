@@ -1,6 +1,6 @@
 #![allow(unused_variables)]
 // Create Meeting Example
-use bigbluebutton::webhook::{CreateHookRequest, DestroyHookRequest};
+use bigbluebutton::webhook::{CreateHookRequest, DestroyHookRequest, ListHooksRequest};
 use bigbluebutton::{Bigbluebutton, Execute};
 
 #[tokio::main]
@@ -17,11 +17,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("{:?}", response.message_key());
     println!("{:?}", response.message());
 
-    let mut request = DestroyHookRequest::new(response.hook_id());
+    let mut request = ListHooksRequest::new();
+    request.meeting_id = Some("24".to_string());
 
     let response = bbb.execute(&request).await?;
 
     println!("{:?}", response.return_code());
-    println!("{:?}", response.removed());
+    println!("{:?}", response.hooks());
+
     Ok(())
 }

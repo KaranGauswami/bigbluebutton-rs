@@ -5,6 +5,7 @@ use async_trait::async_trait;
 use bbb_macro::ApiName;
 use getset::Getters;
 use helper::GetApiName;
+use serde::de::Deserializer;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Default, ApiName)]
@@ -122,6 +123,89 @@ impl DestroyHookRequest {
 #[async_trait]
 impl Execute<DestroyHookRequest, DestroyHookResponse> for Bigbluebutton {
     async fn execute(&self, request: &DestroyHookRequest) -> anyhow::Result<DestroyHookResponse> {
+        self.dispatch(request).await
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Default, ApiName)]
+/// Returns the hooks registered. If a meetingID is informed, will return the
+/// hooks created specifically for this meeting plus all the global hooks
+/// (since they also receive events for this meetingID). If no meetingID is informed,
+/// returns all the hooks available (not only the global hooks, as might be expected).
+pub struct ListHooksRequest {
+    #[serde(rename = "meetingID")]
+    /// A meeting ID to restrict the hooks returned only to the hooks that receive events for this meeting.
+    pub meeting_id: Option<String>,
+
+    #[serde(skip)]
+    api_name: String,
+}
+
+#[derive(Debug, Clone, Deserialize, Getters)]
+#[getset(get = "pub")]
+/// Response return from [CreateHookRequest]
+pub struct ListHooksResponse {
+    #[serde(rename = "returncode")]
+    return_code: ResponseCode,
+
+    #[serde(deserialize_with = "from_hook")]
+    hooks: Vec<Hook>,
+}
+#[derive(Debug, Clone, Deserialize, Getters)]
+#[getset(get = "pub")]
+pub struct Hook {
+    #[serde(rename = "hookID")]
+    hook_id: String,
+
+    #[serde(rename = "callbackURL")]
+    callback_url: String,
+
+    #[serde(rename = "meetingID")]
+    meeting_id: Option<String>,
+
+    #[serde(rename = "permanentHook")]
+    permanent_hook: bool,
+
+    #[serde(rename = "rawData")]
+    raw_data: String,
+}
+fn from_hook<'de, D>(deserializer: D) -> Result<Vec<Hook>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    #[derive(Debug, Deserialize)]
+    struct HookDetailsK {
+        hook: Option<Vec<Hook>>,
+    }
+
+    let temp: HookDetailsK = Deserialize::deserialize(deserializer)?;
+    if let Some(value) = temp.hook {
+        Ok(value)
+    } else {
+        Ok(Vec::new())
+    }
+}
+impl ListHooksRequest {
+    /// Creates new ListHooksRequest
+    ///
+    /// ```rust
+    /// # use bigbluebutton::{Bigbluebutton,Execute};
+    /// use bigbluebutton::webhook::DestoryHookRequest;
+    /// let bbb = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
+    /// //let mut request = CreateHookRequest::new("12");
+    /// //bbb.execute(&request);
+    /// ```
+    pub fn new() -> Self {
+        Self {
+            api_name: "hooks/list".to_string(),
+            ..Default::default()
+        }
+    }
+}
+
+#[async_trait]
+impl Execute<ListHooksRequest, ListHooksResponse> for Bigbluebutton {
+    async fn execute(&self, request: &ListHooksRequest) -> anyhow::Result<ListHooksResponse> {
         self.dispatch(request).await
     }
 }
