@@ -23,7 +23,7 @@ mod test {
             request.meeting_id = Some("14".to_string());
 
             let response = bbb.execute(&request).await.unwrap();
-            assert_eq!(response.meeting_id, "14".to_string());
+            assert_eq!(response.meeting_id(), &"14".to_string());
         });
     }
 
@@ -50,7 +50,7 @@ mod test {
             let request = GetMeetingsRequest::new();
 
             let response = bbb.execute(&request).await.unwrap();
-            assert_ne!(response.meetings.len(), 0);
+            assert_ne!(response.meetings().len(), 0);
         });
     }
 

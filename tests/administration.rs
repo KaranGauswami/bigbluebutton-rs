@@ -82,10 +82,10 @@ mod test {
 
             let response = bbb.execute(&req).await.unwrap();
             assert_eq!(
-                response.return_code,
-                bigbluebutton::error::ResponseCode::SUCCESS
+                response.return_code(),
+                &bigbluebutton::error::ResponseCode::SUCCESS
             );
-            assert_eq!(response.message_key, "successfullyJoined".to_string());
+            assert_eq!(response.message_key(), &"successfullyJoined".to_string());
         })
     }
 }

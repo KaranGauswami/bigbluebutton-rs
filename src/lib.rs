@@ -1,4 +1,4 @@
-// #![deny(missing_docs, rust_2018_idioms)]
+#![deny(missing_docs, rust_2018_idioms)]
 //! BigBlueButton is an open source web conferencing system for online learning.
 //!
 //! This crate provides interface for interacting with Bigbluebutton APIs.

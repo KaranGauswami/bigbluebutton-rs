@@ -156,45 +156,58 @@ pub struct CreateMeetingResponse {
     /// return code of meeting
     return_code: ResponseCode,
 
+    /// A meeting ID that can be used to identify this meeting by the 3rd-party application.
     #[serde(rename = "meetingID")]
     meeting_id: String,
 
+    /// Internal Meeting Id
     #[serde(rename = "internalMeetingID")]
     internal_meeting_id: String,
 
+    /// Parent Meeting Id
     #[serde(rename = "parentMeetingID")]
     parent_meeting_id: String,
 
+    /// The password that the join URL can later provide as its password parameter to indicate the user will join as a viewer. If no attendeePW is provided, the create call will return a randomly generated attendeePW password for the meeting.
     #[serde(rename = "attendeePW")]
     attendee_pw: String,
-
+    /// The password that will join URL can later provide as its password parameter to indicate the user will as a moderator. if no moderatorPW is provided, create will return a randomly generated moderatorPW password for the meeting.
     #[serde(rename = "moderatorPW")]
     moderator_pw: String,
 
+    /// Meeting Created time
     #[serde(rename = "createTime")]
     create_time: u64,
 
+    /// Voice conference number for the FreeSWITCH voice conference associated with this meeting.
     #[serde(rename = "voiceBridge")]
     voice_bridge: String,
 
+    /// The dial access number that participants can call in using regular phone.
     #[serde(rename = "dialNumber")]
     dial_number: String,
 
+    /// Create Date
     #[serde(rename = "createDate")]
     create_date: String,
 
+    /// If user is joined or not
     #[serde(rename = "hasUserJoined")]
     has_user_joined: bool,
 
+    /// The maximum length (in minutes) for the meeting.
     #[serde(rename = "duration")]
     duration: u64,
 
+    /// Has been forcibly ended
     #[serde(rename = "hasBeenForciblyEnded")]
     has_been_forcibly_ended: bool,
 
+    /// Message Key
     #[serde(rename = "messageKey")]
     message_key: String,
 
+    /// Message
     #[serde(rename = "message")]
     message: String,
 }
@@ -261,22 +274,29 @@ pub struct JoinMeetingRequest {
 pub struct JoinMeetingResponse {
     /// Return code
     #[serde(rename = "returncode")]
-    pub return_code: ResponseCode,
+    return_code: ResponseCode,
 
+    /// Message Key
     #[serde(rename = "messageKey")]
-    pub message_key: String,
+    message_key: String,
 
-    pub message: String,
+    /// Message
+    message: String,
 
-    pub meeting_id: String,
+    /// Meeting Id
+    meeting_id: String,
 
-    pub user_id: String,
+    /// User Id
+    user_id: String,
 
-    pub auth_token: String,
+    /// Auth Token
+    auth_token: String,
 
-    pub session_token: String,
+    /// Session Token
+    session_token: String,
 
-    pub url: String,
+    /// Meeting join URL
+    url: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Default, ApiName)]
@@ -295,11 +315,14 @@ pub struct EndMeetingRequest {
 /// Response return from [EndMeetingRequest]
 pub struct EndMeetingResponse {
     #[serde(rename = "returncode")]
+    /// Return code
     pub return_code: ResponseCode,
 
+    /// Message Key
     #[serde(rename = "messageKey")]
     pub message_key: String,
 
+    /// Message
     #[serde(rename = "message")]
     pub message: String,
 }

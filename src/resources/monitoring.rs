@@ -21,8 +21,10 @@ pub struct IsMeetingRunningRequest {
 /// Response return from [IsMeetingRunningRequest]
 pub struct IsMeetingRunningResponse {
     #[serde(rename = "returncode")]
+    /// Return code
     pub return_code: ResponseCode,
 
+    /// If meeting is running or not
     pub running: bool,
 }
 impl IsMeetingRunningRequest {
@@ -56,118 +58,154 @@ pub struct GetMeetingsRequest {
 /// Attendee Details
 pub struct Attendee {
     #[serde(rename = "userID")]
-    pub user_id: String,
+    /// User Id
+    user_id: String,
 
     #[serde(rename = "fullName")]
-    pub full_name: String,
+    /// Full name of user
+    full_name: String,
 
     #[serde(rename = "role")]
-    pub role: String,
+    /// User role
+    role: String,
 
     #[serde(rename = "isPresenter")]
-    pub is_presenter: String,
+    /// If user is presenter
+    is_presenter: String,
 
     #[serde(rename = "isListeningOnly")]
-    pub is_listening_only: bool,
+    /// If user is joined as a listen only mode
+    is_listening_only: bool,
 
     #[serde(rename = "hasJoinedVoice")]
-    pub has_joined_voice: bool,
+    /// If user is joined audio channel
+    has_joined_voice: bool,
 
     #[serde(rename = "hasVideo")]
-    pub has_video: bool,
+    /// If user is sharing video
+    has_video: bool,
 
     #[serde(rename = "clientType")]
-    pub client_type: String,
+    /// Client Type
+    client_type: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Default, Clone, Getters)]
 #[getset(get = "pub")]
 /// Meeting details
 pub struct Meeting {
+    /// Meeting name
     #[serde(rename = "meetingName")]
-    pub meeting_name: String,
+    meeting_name: String,
 
+    /// Meeting Id
     #[serde(rename = "meetingID")]
-    pub meeting_id: String,
+    meeting_id: String,
 
+    /// Internal Meeting Id
     #[serde(rename = "internalMeetingID")]
-    pub internal_meeting_id: String,
+    internal_meeting_id: String,
 
+    /// Create Time
     #[serde(rename = "createTime")]
-    pub create_time: String,
+    create_time: String,
 
+    /// Create Date
     #[serde(rename = "createDate")]
-    pub create_date: String,
+    create_date: String,
 
+    /// Voice Bridge
     #[serde(rename = "voiceBridge")]
-    pub voice_bridge: String,
+    voice_bridge: String,
 
+    /// Dial Number
     #[serde(rename = "dialNumber")]
-    pub dial_number: String,
+    dial_number: String,
 
+    /// Attendee Password
     #[serde(rename = "attendeePW")]
-    pub attendee_pw: String,
+    attendee_pw: String,
 
+    /// Moderator Password
     #[serde(rename = "moderatorPW")]
-    pub moderator_pw: String,
+    moderator_pw: String,
 
+    /// If meeting is running
     #[serde(rename = "running")]
-    pub running: String,
+    running: String,
 
+    /// Meeting duration
     #[serde(rename = "duration")]
-    pub duration: String,
+    duration: String,
 
+    /// Has user joined
     #[serde(rename = "hasUserJoined")]
-    pub has_user_joined: String,
+    has_user_joined: String,
 
+    /// Recording
     recording: String,
 
+    /// Has been forcibly ended
     #[serde(rename = "hasBeenForciblyEnded")]
-    pub has_been_forcibly_ended: String,
+    has_been_forcibly_ended: String,
 
+    /// Start time
     #[serde(rename = "startTime")]
-    pub start_time: String,
+    start_time: String,
 
+    /// End time
     #[serde(rename = "endTime")]
-    pub end_time: String,
+    end_time: String,
 
+    /// Participant count
     #[serde(rename = "participantCount")]
-    pub participant_count: String,
+    participant_count: String,
 
+    /// Listener count
     #[serde(rename = "listenerCount")]
-    pub listener_count: String,
+    listener_count: String,
 
+    /// Voice participant count
     #[serde(rename = "voiceParticipantCount")]
-    pub voice_participant_count: String,
+    voice_participant_count: String,
 
+    /// Video count
     #[serde(rename = "videoCount")]
-    pub video_count: String,
+    video_count: String,
 
+    /// Max users
     #[serde(rename = "maxUsers")]
-    pub max_users: String,
+    max_users: String,
 
+    /// Moderator count
     #[serde(rename = "moderatorCount")]
-    pub moderator_count: String,
+    moderator_count: String,
 
+    /// Attendees
     #[serde(rename = "attendees")]
     #[serde(deserialize_with = "from_attendee")]
-    pub attendees: Vec<Attendee>,
+    attendees: Vec<Attendee>,
 
+    /// Metadata
     #[serde(rename = "metadata")]
-    pub metadata: String,
+    metadata: String,
 
+    /// Is breakout
     #[serde(rename = "isBreakout")]
-    pub is_breakout: String,
+    is_breakout: String,
 }
 
 /// Response return from [GetMeetingsRequest]
 #[derive(Debug, Clone, Deserialize, Getters)]
 #[getset(get = "pub")]
 pub struct GetMeetingsResponse {
+    /// Return code
     #[serde(rename = "returncode")]
-    pub return_code: ResponseCode,
+    return_code: ResponseCode,
+
+    /// Meetings
     #[serde(deserialize_with = "from_meeting")]
-    pub meetings: Vec<Meeting>,
+    meetings: Vec<Meeting>,
 }
 fn from_meeting<'de, D>(deserializer: D) -> Result<Vec<Meeting>, D::Error>
 where
@@ -214,83 +252,109 @@ pub struct GetMeetingInfoRequest {
 #[getset(get = "pub")]
 /// Response return from [GetMeetingInfoRequest]
 pub struct GetMeetingInfoResponse {
+    /// Return code
     #[serde(rename = "returncode")]
-    pub return_code: String,
+    return_code: String,
 
+    /// Meeting name
     #[serde(rename = "meetingName")]
-    pub meeting_name: String,
+    meeting_name: String,
 
+    /// Meeting Id
     #[serde(rename = "meetingID")]
-    pub meeting_id: String,
+    meeting_id: String,
 
+    /// Internal Meeting Id
     #[serde(rename = "internalMeetingID")]
-    pub internal_meeting_id: String,
+    internal_meeting_id: String,
 
+    /// Create Time
     #[serde(rename = "createTime")]
-    pub create_time: String,
+    create_time: String,
 
+    /// Create Date
     #[serde(rename = "createDate")]
-    pub create_date: String,
+    create_date: String,
 
+    /// Voice Bridge
     #[serde(rename = "voiceBridge")]
-    pub voice_bridge: String,
+    voice_bridge: String,
 
+    /// Dial Number
     #[serde(rename = "dialNumber")]
-    pub dial_number: String,
+    dial_number: String,
 
+    /// Attendee Password
     #[serde(rename = "attendeePW")]
-    pub attendee_pw: String,
+    attendee_pw: String,
 
+    /// Moderator Password
     #[serde(rename = "moderatorPW")]
-    pub moderator_pw: String,
+    moderator_pw: String,
 
+    /// If meeting is running
     #[serde(rename = "running")]
-    pub running: String,
+    running: String,
 
+    /// Meeting duration
     #[serde(rename = "duration")]
-    pub duration: String,
+    duration: String,
 
+    /// Has user joined
     #[serde(rename = "hasUserJoined")]
-    pub has_user_joined: String,
+    has_user_joined: String,
 
+    /// Recording
     recording: String,
 
+    /// Has been forcibly ended
     #[serde(rename = "hasBeenForciblyEnded")]
-    pub has_been_forcibly_ended: String,
+    has_been_forcibly_ended: String,
 
+    /// Start time
     #[serde(rename = "startTime")]
-    pub start_time: String,
+    start_time: String,
 
+    /// End time
     #[serde(rename = "endTime")]
-    pub end_time: String,
+    end_time: String,
 
+    /// Participant count
     #[serde(rename = "participantCount")]
-    pub participant_count: String,
+    participant_count: String,
 
+    /// Listener count
     #[serde(rename = "listenerCount")]
-    pub listener_count: String,
+    listener_count: String,
 
+    /// Voice participant count
     #[serde(rename = "voiceParticipantCount")]
-    pub voice_participant_count: String,
+    voice_participant_count: String,
 
+    /// Video count
     #[serde(rename = "videoCount")]
-    pub video_count: String,
+    video_count: String,
 
+    /// Max users
     #[serde(rename = "maxUsers")]
-    pub max_users: String,
+    max_users: String,
 
+    /// Moderator count
     #[serde(rename = "moderatorCount")]
-    pub moderator_count: String,
+    moderator_count: String,
 
+    /// Attendees
     #[serde(rename = "attendees")]
     #[serde(deserialize_with = "from_attendee")]
-    pub attendees: Vec<Attendee>,
+    attendees: Vec<Attendee>,
 
+    /// Metadata
     #[serde(rename = "metadata")]
-    pub metadata: String,
+    metadata: String,
 
+    /// Is breakout
     #[serde(rename = "isBreakout")]
-    pub is_breakout: String,
+    is_breakout: String,
 }
 impl GetMeetingInfoRequest {
     /// Creates new GetMeetingsRequest

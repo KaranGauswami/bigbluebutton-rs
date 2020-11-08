@@ -32,20 +32,26 @@ pub struct CreateHookRequest {
 /// Response return from [CreateHookRequest]
 pub struct CreateHookResponse {
     #[serde(rename = "returncode")]
+    /// SUCCESS of FAILED
     return_code: ResponseCode,
 
+    /// Webhook id
     #[serde(rename = "hookID")]
     hook_id: String,
 
+    /// Permament Hook Status
     #[serde(rename = "permanentHook")]
     permanent_hook: Option<bool>,
 
+    /// Whether or not webhook events are processed or not
     #[serde(rename = "rawData")]
     raw_data: Option<bool>,
 
+    /// Message key
     #[serde(rename = "messageKey")]
     message_key: Option<String>,
 
+    /// Message
     #[serde(rename = "message")]
     message: Option<String>,
 }
@@ -91,11 +97,10 @@ pub struct DestroyHookRequest {
 /// Response return from [CreateHookRequest]
 pub struct DestroyHookResponse {
     /// return code of meeting
-    /// ```
-    /// ```
     #[serde(rename = "returncode")]
     return_code: ResponseCode,
 
+    /// If hook is removed or not
     removed: bool,
 }
 impl DestroyHookRequest {
@@ -142,27 +147,35 @@ pub struct ListHooksRequest {
 #[getset(get = "pub")]
 /// Response return from [CreateHookRequest]
 pub struct ListHooksResponse {
+    /// Return code Success or Failed
     #[serde(rename = "returncode")]
     return_code: ResponseCode,
 
+    /// Hooks Details
     #[serde(deserialize_with = "from_hook")]
     hooks: Vec<Hook>,
 }
 #[derive(Debug, Clone, Deserialize, Getters)]
 #[getset(get = "pub")]
+/// Webhook Details
 pub struct Hook {
+    /// The ID of the webhook
     #[serde(rename = "hookID")]
     hook_id: String,
 
+    /// The URL that will receive a POST call with the events. The same URL cannot be registered more than once.
     #[serde(rename = "callbackURL")]
     callback_url: String,
 
+    /// MeetingId binded to webhook
     #[serde(rename = "meetingID")]
     meeting_id: Option<String>,
 
+    /// Permanently stored hook status
     #[serde(rename = "permanentHook")]
     permanent_hook: bool,
 
+    /// Whether or not data is processed
     #[serde(rename = "rawData")]
     raw_data: String,
 }
