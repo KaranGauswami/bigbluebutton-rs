@@ -5,7 +5,6 @@ use async_trait::async_trait;
 use bbb_macro::ApiName;
 use getset::Getters;
 use helper::GetApiName;
-use serde::de::Deserializer;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Default, ApiName)]

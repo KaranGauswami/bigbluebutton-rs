@@ -82,12 +82,7 @@ impl Bigbluebutton {
     {
         let action = request.get_api_name();
         let query_params = serde_qs::to_string(request)?;
-        let checksum: String;
-        if action.starts_with("hooks") {
-            checksum = self::Bigbluebutton::hash_unsecure(vec![action, &query_params, &self.salt]);
-        } else {
-            checksum = self::Bigbluebutton::hash(vec![action, &query_params, &self.salt]);
-        }
+        let checksum = self::Bigbluebutton::hash(vec![action, &query_params, &self.salt]);
         Ok(format!(
             "{}{}?{}&checksum={}",
             self.url, action, query_params, checksum

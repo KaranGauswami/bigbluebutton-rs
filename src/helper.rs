@@ -3,8 +3,17 @@ use sha2::{Digest, Sha256};
 
 impl Bigbluebutton {
     /// hash function for converting to SHA-256
+    #[cfg(not(feature = "webhook"))]
     pub(crate) fn hash(payload: Vec<&str>) -> String {
         let mut hasher = Sha256::new();
+        hasher.update(payload.join(""));
+        let result = hasher.finalize();
+        let hash_value = result.as_slice();
+        hex::encode(hash_value)
+    }
+    #[cfg(feature = "webhook")]
+    pub(crate) fn hash(payload: Vec<&str>) -> String {
+        let mut hasher = sha1::Sha1::new();
         hasher.update(payload.join(""));
         let result = hasher.finalize();
         let hash_value = result.as_slice();
@@ -18,13 +27,6 @@ impl Bigbluebutton {
             .map(|(key, value)| format!("{}={}", key, value))
             .collect();
         collection.join("&")
-    }
-    pub(crate) fn hash_unsecure(payload: Vec<&str>) -> String {
-        let mut hasher = sha1::Sha1::new();
-        hasher.update(payload.join(""));
-        let result = hasher.finalize();
-        let hash_value = result.as_slice();
-        hex::encode(result)
     }
 }
 pub(crate) trait GetApiName {
