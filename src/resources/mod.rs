@@ -9,3 +9,7 @@ pub mod monitoring;
 #[cfg(feature = "webhook")]
 /// Webhook apis
 pub mod webhook;
+
+#[cfg(feature = "recording")]
+/// Recordings apis
+pub mod recording;

@@ -18,7 +18,7 @@ async-trait = "0.1.41"
 bbb-macro = { path = "./bbb-macro" }
 anyhow = "1.0.34"
 getset = "0.1.1"
-sha-1 = { version = "0.9.2", optional = true }
+sha-1 = { version = "0.9.2", optional = false }
 
 [dev-dependencies]
 tokio = { version = "0.2", features = ["macros"] }
@@ -27,7 +27,8 @@ tokio = { version = "0.2", features = ["macros"] }
 default = ["monitoring", "administration", "webhook"]
 monitoring = []
 administration = []
-webhook = ["sha-1"]
+webhook = []
+recording = []
 
 [workspace]
 members = ["bbb-macro"]

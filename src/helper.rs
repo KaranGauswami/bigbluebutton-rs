@@ -19,7 +19,6 @@ impl Bigbluebutton {
             .collect();
         collection.join("&")
     }
-    #[cfg(feature = "webhook")]
     pub(crate) fn hash_unsecure(payload: Vec<&str>) -> String {
         let mut hasher = sha1::Sha1::new();
         hasher.update(payload.join(""));

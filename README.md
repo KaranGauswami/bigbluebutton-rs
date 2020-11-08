@@ -73,11 +73,11 @@ async fn main() {
 ## Recording
 
 - [ ] getRecordings
-- [ ] publishRecordings
-- [ ] deleteRecordings
+- [x] publishRecordings
+- [x] deleteRecordings
 - [ ] updateRecordings
 - [ ] getRecordingTextTracks
-- [ ] updateRecordings
+- [ ] putRecordingTextTrack
 
 ## Webhooks
 

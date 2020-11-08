@@ -57,6 +57,9 @@ pub use resources::monitoring;
 #[cfg(feature = "webhook")]
 pub use resources::webhook;
 
+#[cfg(feature = "recording")]
+pub use resources::recording;
+
 /// Implementation of Bigbluebutton APIs
 pub struct Bigbluebutton {
     salt: String,
