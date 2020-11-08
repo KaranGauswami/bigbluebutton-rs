@@ -54,6 +54,9 @@ pub use resources::administration;
 #[cfg(feature = "monitoring")]
 pub use resources::monitoring;
 
+#[cfg(feature = "webhook")]
+pub use resources::webhook;
+
 /// Implementation of Bigbluebutton APIs
 pub struct Bigbluebutton {
     salt: String,
@@ -76,7 +79,12 @@ impl Bigbluebutton {
     {
         let action = request.get_api_name();
         let query_params = serde_qs::to_string(request)?;
-        let checksum = self::Bigbluebutton::hash(vec![action, &query_params, &self.salt]);
+        let checksum: String;
+        if action.starts_with("hooks") {
+            checksum = self::Bigbluebutton::hash_unsecure(vec![action, &query_params, &self.salt]);
+        } else {
+            checksum = self::Bigbluebutton::hash(vec![action, &query_params, &self.salt]);
+        }
         Ok(format!(
             "{}{}?{}&checksum={}",
             self.url, action, query_params, checksum
@@ -99,7 +107,9 @@ impl Bigbluebutton {
         T: serde::Deserialize<'a>,
     {
         let url = self.create_api_url(request)?;
+        eprintln!("{}", url);
         let text_response = reqwest::get(&url).await?.text().await?;
+        eprintln!("{:?}", text_response);
         let return_response;
         if text_response.contains("SUCCESS") {
             return_response = Ok(serde_xml_rs::from_str::<T>(&text_response)?);

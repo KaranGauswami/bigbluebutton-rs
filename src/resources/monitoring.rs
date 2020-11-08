@@ -2,6 +2,7 @@ use crate::error::ResponseCode;
 use crate::{helper, Bigbluebutton, Execute};
 use async_trait::async_trait;
 use bbb_macro::ApiName;
+use getset::Getters;
 use helper::GetApiName;
 use serde::de::Deserializer;
 use serde::{Deserialize, Serialize};
@@ -15,7 +16,8 @@ pub struct IsMeetingRunningRequest {
     api_name: String,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Getters)]
+#[getset(get = "pub")]
 /// Response return from [IsMeetingRunningRequest]
 pub struct IsMeetingRunningResponse {
     #[serde(rename = "returncode")]
@@ -49,7 +51,8 @@ pub struct GetMeetingsRequest {
     api_name: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Getters)]
+#[getset(get = "pub")]
 /// Attendee Details
 pub struct Attendee {
     #[serde(rename = "userID")]
@@ -77,7 +80,8 @@ pub struct Attendee {
     pub client_type: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, Clone)]
+#[derive(Debug, Serialize, Deserialize, Default, Clone, Getters)]
+#[getset(get = "pub")]
 /// Meeting details
 pub struct Meeting {
     #[serde(rename = "meetingName")]
@@ -157,7 +161,8 @@ pub struct Meeting {
 }
 
 /// Response return from [GetMeetingsRequest]
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Getters)]
+#[getset(get = "pub")]
 pub struct GetMeetingsResponse {
     #[serde(rename = "returncode")]
     pub return_code: ResponseCode,
@@ -205,7 +210,8 @@ pub struct GetMeetingInfoRequest {
     api_name: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, Clone)]
+#[derive(Debug, Serialize, Deserialize, Default, Clone, Getters)]
+#[getset(get = "pub")]
 /// Response return from [GetMeetingInfoRequest]
 pub struct GetMeetingInfoResponse {
     #[serde(rename = "returncode")]
@@ -286,22 +292,6 @@ pub struct GetMeetingInfoResponse {
     #[serde(rename = "isBreakout")]
     pub is_breakout: String,
 }
-fn from_attendee<'de, D>(deserializer: D) -> Result<Vec<Attendee>, D::Error>
-where
-    D: Deserializer<'de>,
-{
-    #[derive(Debug, Deserialize)]
-    struct AttendeDetailsK {
-        attendee: Option<Vec<Attendee>>,
-    }
-
-    let temp: AttendeDetailsK = Deserialize::deserialize(deserializer)?;
-    if let Some(value) = temp.attendee {
-        Ok(value)
-    } else {
-        Ok(Vec::new())
-    }
-}
 impl GetMeetingInfoRequest {
     /// Creates new GetMeetingsRequest
     pub fn new() -> Self {
@@ -319,5 +309,22 @@ impl Execute<GetMeetingInfoRequest, GetMeetingInfoResponse> for Bigbluebutton {
         request: &GetMeetingInfoRequest,
     ) -> anyhow::Result<GetMeetingInfoResponse> {
         self.dispatch(request).await
+    }
+}
+
+fn from_attendee<'de, D>(deserializer: D) -> Result<Vec<Attendee>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    #[derive(Debug, Deserialize)]
+    struct AttendeDetailsK {
+        attendee: Option<Vec<Attendee>>,
+    }
+
+    let temp: AttendeDetailsK = Deserialize::deserialize(deserializer)?;
+    if let Some(value) = temp.attendee {
+        Ok(value)
+    } else {
+        Ok(Vec::new())
     }
 }

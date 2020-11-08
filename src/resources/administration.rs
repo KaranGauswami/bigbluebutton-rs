@@ -3,6 +3,7 @@ use crate::Bigbluebutton;
 use crate::{helper, Execute};
 use async_trait::async_trait;
 use bbb_macro::ApiName;
+use getset::Getters;
 use helper::GetApiName;
 use serde::{Deserialize, Serialize};
 
@@ -147,53 +148,55 @@ pub struct CreateMeetingRequest {
     api_name: String,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Getters)]
+#[getset(get = "pub")]
 /// Response return from [CreateMeetingRequest]
 pub struct CreateMeetingResponse {
     #[serde(rename = "returncode")]
-    pub return_code: ResponseCode,
+    /// return code of meeting
+    return_code: ResponseCode,
 
     #[serde(rename = "meetingID")]
-    pub meeting_id: String,
+    meeting_id: String,
 
     #[serde(rename = "internalMeetingID")]
-    pub internal_meeting_id: String,
+    internal_meeting_id: String,
 
     #[serde(rename = "parentMeetingID")]
-    pub parent_meeting_id: String,
+    parent_meeting_id: String,
 
     #[serde(rename = "attendeePW")]
-    pub attendee_pw: String,
+    attendee_pw: String,
 
     #[serde(rename = "moderatorPW")]
-    pub moderator_pw: String,
+    moderator_pw: String,
 
     #[serde(rename = "createTime")]
-    pub create_time: u64,
+    create_time: u64,
 
     #[serde(rename = "voiceBridge")]
-    pub voice_bridge: String,
+    voice_bridge: String,
 
     #[serde(rename = "dialNumber")]
-    pub dial_number: String,
+    dial_number: String,
 
     #[serde(rename = "createDate")]
-    pub create_date: String,
+    create_date: String,
 
     #[serde(rename = "hasUserJoined")]
-    pub has_user_joined: bool,
+    has_user_joined: bool,
 
     #[serde(rename = "duration")]
-    pub duration: u64,
+    duration: u64,
 
     #[serde(rename = "hasBeenForciblyEnded")]
-    pub has_been_forcibly_ended: bool,
+    has_been_forcibly_ended: bool,
 
     #[serde(rename = "messageKey")]
-    pub message_key: String,
+    message_key: String,
 
     #[serde(rename = "message")]
-    pub message: String,
+    message: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Default, ApiName)]
@@ -252,7 +255,8 @@ pub struct JoinMeetingRequest {
     api_name: String,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Getters)]
+#[getset(get = "pub")]
 /// Response return from [JoinMeetingRequest]
 pub struct JoinMeetingResponse {
     /// Return code
@@ -286,7 +290,8 @@ pub struct EndMeetingRequest {
     api_name: String,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Getters)]
+#[getset(get = "pub")]
 /// Response return from [EndMeetingRequest]
 pub struct EndMeetingResponse {
     #[serde(rename = "returncode")]

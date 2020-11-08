@@ -19,6 +19,14 @@ impl Bigbluebutton {
             .collect();
         collection.join("&")
     }
+    #[cfg(feature = "webhook")]
+    pub(crate) fn hash_unsecure(payload: Vec<&str>) -> String {
+        let mut hasher = sha1::Sha1::new();
+        hasher.update(payload.join(""));
+        let result = hasher.finalize();
+        let hash_value = result.as_slice();
+        hex::encode(result)
+    }
 }
 pub(crate) trait GetApiName {
     fn get_api_name(&self) -> &str;

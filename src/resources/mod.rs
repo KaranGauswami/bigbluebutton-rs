@@ -5,3 +5,7 @@ pub mod administration;
 #[cfg(feature = "monitoring")]
 /// Conference monitoring apis
 pub mod monitoring;
+
+#[cfg(feature = "webhook")]
+/// Webhook apis
+pub mod webhook;
