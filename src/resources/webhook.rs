@@ -9,7 +9,7 @@ use serde::de::Deserializer;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Default, ApiName)]
-/// Creates a BigBlueButton meeting.
+/// Creates a new webhook
 pub struct CreateHookRequest {
     #[serde(rename = "callbackURL")]
     /// The URL that will receive a POST call with the events. The same URL cannot be registered more than once.
@@ -94,7 +94,7 @@ pub struct DestroyHookRequest {
 
 #[derive(Debug, Clone, Deserialize, Getters)]
 #[getset(get = "pub")]
-/// Response return from [CreateHookRequest]
+/// Response return from [DestroyHookRequest]
 pub struct DestroyHookResponse {
     /// return code of meeting
     #[serde(rename = "returncode")]
@@ -144,7 +144,7 @@ pub struct ListHooksRequest {
 
 #[derive(Debug, Clone, Deserialize, Getters)]
 #[getset(get = "pub")]
-/// Response return from [CreateHookRequest]
+/// Response return from [ListHooksRequest]
 pub struct ListHooksResponse {
     /// Return code Success or Failed
     #[serde(rename = "returncode")]
