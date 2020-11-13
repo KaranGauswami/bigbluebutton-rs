@@ -92,7 +92,7 @@ impl DeleteRecordingsRequest {
     /// # use bigbluebutton::{Bigbluebutton,Execute};
     /// use bigbluebutton::recording::DeleteRecordingsRequest;
     /// let bbb = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
-    /// let mut request = DeleteRecordingsRequest::new("12",false);
+    /// let mut request = DeleteRecordingsRequest::new("12");
     /// bbb.execute(&request);
     /// ```
     pub fn new(record_id: impl ToString) -> Self {
