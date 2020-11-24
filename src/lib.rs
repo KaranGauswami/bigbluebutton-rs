@@ -105,9 +105,7 @@ impl Bigbluebutton {
         T: serde::Deserialize<'a>,
     {
         let url = self.create_api_url(request)?;
-        eprintln!("{}", url);
         let text_response = reqwest::get(&url).await?.text().await?;
-        eprintln!("{:?}", text_response);
         let return_response;
         if text_response.contains("SUCCESS") {
             return_response = Ok(serde_xml_rs::from_str::<T>(&text_response)?);

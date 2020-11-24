@@ -307,6 +307,8 @@ pub struct EndMeetingRequest {
     pub meeting_id: String,
     /// The moderator password for this meeting. You can not end a meeting using the attendee password.
     pub password: String,
+
+    #[serde(skip)]
     api_name: String,
 }
 
@@ -363,7 +365,7 @@ impl JoinMeetingRequest {
             full_name: full_name.to_string(),
             meeting_id: meeting_id.to_string(),
             password: password.to_string(),
-            redirect: false,
+            redirect: true,
             api_name: "join".to_string(),
             ..Default::default()
         }
