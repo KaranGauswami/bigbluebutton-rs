@@ -52,7 +52,6 @@ impl Execute<IsMeetingRunningRequest, IsMeetingRunningResponse> for Bigbluebutto
 #[derive(Debug, Serialize, Deserialize, Default, ApiName)]
 /// This call will return a list of all the meetings found on this server.
 pub struct GetMeetingsRequest {
-
     #[serde(skip)]
     api_name: String,
 }

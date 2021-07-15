@@ -1,6 +1,6 @@
 #![allow(unused_variables)]
 // Create Meeting Example
-use bigbluebutton::webhook::{CreateHookRequest, ListHooksRequest};
+use bigbluebutton::webhook::{CreateHookRequest};
 use bigbluebutton::{Bigbluebutton, Execute};
 
 #[tokio::main]
