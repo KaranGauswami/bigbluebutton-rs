@@ -11,7 +11,7 @@ mod test {
         let bbb_secret = std::env::var("BBB_SECRET").expect("BBB_SECRET is not set");
         let bbb = Bigbluebutton::new(&bbb_url, &bbb_secret);
 
-        let mut rt = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
+        let rt = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
         rt.block_on(async {
             let mut request = CreateMeetingRequest::new("14");
             request.moderator_pw = Some("modp".to_string());
@@ -34,7 +34,7 @@ mod test {
         let bbb_secret = std::env::var("BBB_SECRET").expect("BBB_SECRET is not set");
         let bbb = Bigbluebutton::new(&bbb_url, &bbb_secret);
 
-        let mut rt = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
+        let rt = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
         rt.block_on(async {
             let mut request = CreateMeetingRequest::new("15");
             request.moderator_pw = Some("modp".to_string());

@@ -13,7 +13,7 @@ mod test {
         let bbb_secret = var("BBB_SECRET").unwrap();
         let bbb = Bigbluebutton::new(&bbb_url, &bbb_secret);
 
-        let mut rt = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
+        let rt = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
         rt.block_on(async {
             let meeting_id = "1".to_string();
             let attendee_pw = "attendeep".to_string();
@@ -47,7 +47,7 @@ mod test {
         let bbb_secret = var("BBB_SECRET").unwrap();
         let bbb = Bigbluebutton::new(&bbb_url, &bbb_secret);
 
-        let mut rt = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
+        let rt = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
         rt.block_on(async {
             let mut req = CreateMeetingRequest::new("2");
             req.moderator_pw = Some("modp".to_string());
@@ -72,7 +72,7 @@ mod test {
         let bbb_secret = var("BBB_SECRET").unwrap();
         let bbb = Bigbluebutton::new(&bbb_url, &bbb_secret);
 
-        let mut rt = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
+        let rt = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
         rt.block_on(async {
             let mut req = CreateMeetingRequest::new("3");
             req.moderator_pw = Some("modp".to_string());
