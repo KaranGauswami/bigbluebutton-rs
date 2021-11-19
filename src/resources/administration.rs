@@ -86,7 +86,7 @@ pub struct CreateMeetingRequest {
     /// Setting webcamsOnlyForModerator=true will cause all webcams shared by viewers during this meeting to only appear for moderators
     pub webcams_only_for_moderator: Option<bool>,
 
-    /// Setting logo=http://www.example.com/my-custom-logo.png will replace the default logo in the Flash client.
+    /// Setting logo=<http://www.example.com/my-custom-logo.png> will replace the default logo in the Flash client.
     pub logo: Option<String>,
 
     #[serde(rename = "bannerText")]

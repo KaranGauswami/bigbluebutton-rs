@@ -9,8 +9,8 @@ mod test {
     #[test]
     #[ignore]
     fn create_meeting() {
-        let bbb_url = var("BBB_URL").unwrap();
-        let bbb_secret = var("BBB_SECRET").unwrap();
+        let bbb_url = var("BBB_URL").expect("BBB_URL is not set");
+        let bbb_secret = var("BBB_SECRET").expect("BBB_SECRET is not set");
         let bbb = Bigbluebutton::new(&bbb_url, &bbb_secret);
 
         let rt = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
@@ -30,7 +30,10 @@ mod test {
             request.dial_number = Some(dial_number.clone());
             request.duration = Some(duration.clone());
 
-            let response = bbb.execute(&request).await.unwrap();
+            let response = bbb
+                .execute(&request)
+                .await
+                .expect("Unable to parse CreateMeetingResponse");
             assert_eq!(response.meeting_id(), &meeting_id);
             assert_eq!(response.attendee_pw(), &attendee_pw);
             assert_eq!(response.moderator_pw(), &moderator_pw);
@@ -43,8 +46,8 @@ mod test {
     #[test]
     #[ignore]
     fn end_meeting() {
-        let bbb_url = var("BBB_URL").unwrap();
-        let bbb_secret = var("BBB_SECRET").unwrap();
+        let bbb_url = var("BBB_URL").expect("BBB_URL is not set");
+        let bbb_secret = var("BBB_SECRET").expect("BBB_SECRET is not set");
         let bbb = Bigbluebutton::new(&bbb_url, &bbb_secret);
 
         let rt = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
@@ -55,7 +58,10 @@ mod test {
 
             let req = EndMeetingRequest::new("2", "modp");
 
-            let response = bbb.execute(&req).await.unwrap();
+            let response = bbb
+                .execute(&req)
+                .await
+                .expect("Unable to parse EndMeetingResponse");
             println!("{:?}", response);
             assert_eq!(
                 response.return_code,
@@ -68,8 +74,8 @@ mod test {
     #[test]
     #[ignore]
     fn join_meeting() {
-        let bbb_url = var("BBB_URL").unwrap();
-        let bbb_secret = var("BBB_SECRET").unwrap();
+        let bbb_url = var("BBB_URL").expect("BBB_URL is not set");
+        let bbb_secret = var("BBB_SECRET").expect("BBB_SECRET is not set");
         let bbb = Bigbluebutton::new(&bbb_url, &bbb_secret);
 
         let rt = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
@@ -80,7 +86,10 @@ mod test {
 
             let req = JoinMeetingRequest::new("KaranGauswami", "3", "modp");
 
-            let response = bbb.execute(&req).await.unwrap();
+            let response = bbb
+                .execute(&req)
+                .await
+                .expect("Unable to parse JoinMeetingResponse");
             assert_eq!(
                 response.return_code(),
                 &bigbluebutton::error::ResponseCode::SUCCESS
