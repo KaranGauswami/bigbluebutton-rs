@@ -61,7 +61,6 @@ async fn main() {
 - [x] create
 - [ ] getDefaultConfigXML
 - [ ] setConfigXML
-- [x] join
 - [x] end
 
 ## Monitoring
