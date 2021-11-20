@@ -1,6 +1,6 @@
 #![allow(unused_variables)]
 // Create Meeting Example
-use bigbluebutton::administration::{CreateMeetingRequest, JoinMeetingRequest};
+use bigbluebutton::administration::CreateMeetingRequest;
 use bigbluebutton::{Bigbluebutton, Execute};
 
 #[tokio::main]
@@ -19,14 +19,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     request.record = Some(true);
 
     // execute new meeting request
-    let _ = bbb.execute(&request).await?;
-
-    // join meeting request
-    let request = JoinMeetingRequest::new("Karan Gauswami", "12", "modp");
-
     let response = bbb.execute(&request).await?;
 
-    println!("{:?}", response);
+    eprintln!("{:?}", response);
 
     Ok(())
 }

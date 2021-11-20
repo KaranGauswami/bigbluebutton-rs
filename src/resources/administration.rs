@@ -213,93 +213,6 @@ pub struct CreateMeetingResponse {
 }
 
 #[derive(Debug, Serialize, Deserialize, Default, ApiName)]
-/// Joins a user to the meeting specified in the meetingID parameter.
-pub struct JoinMeetingRequest {
-    #[serde(rename = "fullName")]
-    /// The full name that is to be used to identify this user to other conference attendees.
-    pub full_name: String,
-
-    #[serde(rename = "meetingID")]
-    /// The meeting ID that identifies the meeting you are attempting to join.
-    pub meeting_id: String,
-
-    #[serde(rename = "password")]
-    /// The password that this attendee is using. If the moderator password is supplied, he will be given moderator status (and the same for attendee password, etc)
-    pub password: String,
-
-    #[serde(rename = "createTime")]
-    /// Third-party apps using the API can now pass createTime parameter (which was created in the create call), BigBlueButton will ensure it matches the ‘createTime’ for the session. If they differ, BigBlueButton will not proceed with the join request. This prevents a user from reusing their join URL for a subsequent session with the same meetingID.
-    pub create_time: Option<String>,
-
-    #[serde(rename = "userID")]
-    /// An identifier for this user that will help your application to identify which person this is. This user ID will be returned for this user in the getMeetingInfo API call so that you can check
-    pub user_id: Option<String>,
-
-    #[serde(rename = "webVoiceConf")]
-    /// If you want to pass in a custom voice-extension when a user joins the voice conference using voip. This is useful if you want to collect more info in you Call Detail Records about the user joining the conference. You need to modify your /etc/asterisk/bbb-extensions.conf to handle this new extensions.
-    pub web_voice_conf: Option<String>,
-
-    #[serde(rename = "configToken")]
-    /// The token returned by a setConfigXML API call. This causes the BigBlueButton client to load the config.xml associated with the token (not the default config.xml)
-    pub config_token: Option<String>,
-
-    #[serde(rename = "defaultLayout")]
-    /// The layout name to be loaded first when the application is loaded.
-    pub default_layout: Option<String>,
-
-    #[serde(rename = "avatarURL")]
-    /// The link for the user’s avatar to be displayed when displayAvatar in config.xml is set to true (not yet implemented in the HTML5 client, see [#8566](https://github.com/bigbluebutton/bigbluebutton/issues/8566).
-    pub avatar_url: Option<String>,
-
-    redirect: bool,
-
-    #[serde(rename = "clientURL")]
-    /// Some third party apps what to display their own custom client. These apps can pass the URL containing the custom client and when redirect is not set to false, the browser will get redirected to the value of clientURL.
-    pub client_url: Option<bool>,
-
-    #[serde(rename = "joinViaHtml5")]
-    /// Set to “true” to force the HTML5 client to load for the user.
-    pub join_via_html5: Option<u64>,
-
-    /// Set to “true” to indicate that the user is a guest, otherwise do NOT send this parameter.
-    pub guest: Option<bool>,
-
-    #[serde(skip)]
-    api_name: String,
-}
-
-#[derive(Debug, Clone, Deserialize, Getters)]
-#[getset(get = "pub")]
-/// Response return from [JoinMeetingRequest]
-pub struct JoinMeetingResponse {
-    /// Return code
-    #[serde(rename = "returncode")]
-    return_code: ResponseCode,
-
-    /// Message Key
-    #[serde(rename = "messageKey")]
-    message_key: String,
-
-    /// Message
-    message: String,
-
-    /// Meeting Id
-    meeting_id: String,
-
-    /// User Id
-    user_id: String,
-
-    /// Auth Token
-    auth_token: String,
-
-    /// Session Token
-    session_token: String,
-
-    /// Meeting join URL
-    url: String,
-}
-
-#[derive(Debug, Serialize, Deserialize, Default, ApiName)]
 /// Use this to forcibly end a meeting and kick all participants out of the meeting.
 pub struct EndMeetingRequest {
     #[serde(rename = "meetingID")]
@@ -347,30 +260,7 @@ impl CreateMeetingRequest {
         }
     }
 }
-impl JoinMeetingRequest {
-    /// creates new JoinMeetingRequest
-    ///
-    /// ```rust,no_run
-    /// # use bigbluebutton::{Bigbluebutton,Execute};
-    /// use bigbluebutton::administration::JoinMeetingRequest;
-    /// let bbb = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
-    /// let request =JoinMeetingRequest::new("Karan Gauswami","12","modp");
-    /// bbb.execute(&request);
-    /// ```
-    pub fn new<T>(full_name: T, meeting_id: T, password: T) -> Self
-    where
-        T: ToString,
-    {
-        Self {
-            full_name: full_name.to_string(),
-            meeting_id: meeting_id.to_string(),
-            password: password.to_string(),
-            redirect: true,
-            api_name: "join".to_string(),
-            ..Default::default()
-        }
-    }
-}
+
 impl EndMeetingRequest {
     /// creates new EndMeetingRequest
     pub fn new(meeting_id: impl ToString, password: impl ToString) -> Self {
@@ -388,13 +278,6 @@ impl Execute<CreateMeetingRequest, CreateMeetingResponse> for Bigbluebutton {
         &self,
         request: &CreateMeetingRequest,
     ) -> anyhow::Result<CreateMeetingResponse> {
-        self.dispatch(request).await
-    }
-}
-
-#[async_trait]
-impl Execute<JoinMeetingRequest, JoinMeetingResponse> for Bigbluebutton {
-    async fn execute(&self, request: &JoinMeetingRequest) -> anyhow::Result<JoinMeetingResponse> {
         self.dispatch(request).await
     }
 }

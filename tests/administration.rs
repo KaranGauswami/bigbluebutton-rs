@@ -1,8 +1,6 @@
 #[cfg(test)]
 mod test {
-    use bigbluebutton::administration::{
-        CreateMeetingRequest, EndMeetingRequest, JoinMeetingRequest,
-    };
+    use bigbluebutton::administration::{CreateMeetingRequest, EndMeetingRequest};
     use bigbluebutton::{Bigbluebutton, Execute};
     use std::env::var;
 
@@ -68,33 +66,6 @@ mod test {
                 bigbluebutton::error::ResponseCode::SUCCESS
             );
             assert_eq!(response.message_key, "sentEndMeetingRequest".to_string());
-        })
-    }
-
-    #[test]
-    #[ignore]
-    fn join_meeting() {
-        let bbb_url = var("BBB_URL").expect("BBB_URL is not set");
-        let bbb_secret = var("BBB_SECRET").expect("BBB_SECRET is not set");
-        let bbb = Bigbluebutton::new(&bbb_url, &bbb_secret);
-
-        let rt = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
-        rt.block_on(async {
-            let mut req = CreateMeetingRequest::new("3");
-            req.moderator_pw = Some("modp".to_string());
-            let _ = bbb.execute(&req).await;
-
-            let req = JoinMeetingRequest::new("KaranGauswami", "3", "modp");
-
-            let response = bbb
-                .execute(&req)
-                .await
-                .expect("Unable to parse JoinMeetingResponse");
-            assert_eq!(
-                response.return_code(),
-                &bigbluebutton::error::ResponseCode::SUCCESS
-            );
-            assert_eq!(response.message_key(), &"successfullyJoined".to_string());
         })
     }
 }
