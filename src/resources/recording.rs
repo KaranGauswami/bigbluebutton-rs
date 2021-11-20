@@ -47,7 +47,6 @@ impl PublishRecordingsRequest {
             record_id: record_id.to_string(),
             publish,
             api_name: "publishRecordings".to_string(),
-            ..Default::default()
         }
     }
 }
@@ -99,7 +98,6 @@ impl DeleteRecordingsRequest {
         Self {
             record_id: record_id.to_string(),
             api_name: "deleteRecordings".to_string(),
-            ..Default::default()
         }
     }
 }
