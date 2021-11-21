@@ -20,13 +20,4 @@ impl Bigbluebutton {
         let hash_value = result.as_slice();
         hex::encode(hash_value)
     }
-
-    /// serialize query parameters into query string
-    pub(crate) fn serialize_params(params: Vec<(&str, &str)>) -> String {
-        let collection: Vec<String> = params
-            .iter()
-            .map(|(key, value)| format!("{}={}", key, value))
-            .collect();
-        collection.join("&")
-    }
 }

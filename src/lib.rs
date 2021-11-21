@@ -18,11 +18,11 @@
 //! let params = vec![
 //!     ("password", "pass"),
 //!     ("fullName", "name"),
-//!     ("meetingId", "1"),
+//!     ("meetingID", "1"),
 //! ];
 //!
-//! let url =client.generate_url("join", params);
-//! println!("{}",url) // https://example.com/bigbluebutton/api/join?password=pass&fullName=name&meetingId=1&checksum=94e467c1b4b13f4452ca5d1deb9b7b74e1063aea55fe078139015a7d6311cfdf
+//! let url =client.generate_url("join", params).expect("Unable to generate url");
+//! println!("{}",url) // https://example.com/bigbluebutton/api/join?password=pass&fullName=name&meetingID=1&checksum=94e467c1b4b13f4452ca5d1deb9b7b74e1063aea55fe078139015a7d6311cfdf
 //! ```
 //! - Creating Meeting
 //! ```rust,no_run
@@ -87,13 +87,20 @@ impl Bigbluebutton {
     }
 
     /// Generates BBB URL with checksum to interact with BBB server
-    pub fn generate_url(&self, api_path: &str, params: Vec<(&str, &str)>) -> String {
-        let query_params = self::Bigbluebutton::serialize_params(params);
-        let checksum = self::Bigbluebutton::hash(vec![api_path, &query_params, &self.salt]);
-        format!(
-            "{}{}?{}&checksum={}",
-            self.url, api_path, query_params, checksum
-        )
+    pub fn generate_url<K, V>(
+        &self,
+        api_path: &str,
+        params: impl IntoIterator<Item = (K, V)>,
+    ) -> Result<String, url::ParseError>
+    where
+        K: AsRef<str>,
+        V: AsRef<str>,
+    {
+        let url = reqwest::Url::parse_with_params(&self.url, params)?;
+        let query = url.query().expect("Query params not found");
+        // let query_params = self::Bigbluebutton::serialize_params(params);
+        let checksum = self::Bigbluebutton::hash(vec![api_path, &query, &self.salt]);
+        Ok(format!("{}&checksum={}", url, checksum))
     }
 
     pub(crate) async fn dispatch<'a, R, T>(&self, api_path: &str, request: &R) -> anyhow::Result<T>
