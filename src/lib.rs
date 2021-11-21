@@ -21,12 +21,12 @@
 //!     ("meetingId", "1"),
 //! ];
 //!
-//! let url = bbb.generate_url("join", params);
+//! let url =client.generate_url("join", params);
 //! println!("{}",url) // https://example.com/bigbluebutton/api/join?password=pass&fullName=name&meetingId=1&checksum=94e467c1b4b13f4452ca5d1deb9b7b74e1063aea55fe078139015a7d6311cfdf
 //! ```
 //! - Creating Meeting
 //! ```rust,no_run
-//! use bigbluebutton::{Bigbluebutton,Execute};
+//! use bigbluebutton::Bigbluebutton;
 //! use bigbluebutton::administration::CreateMeetingRequest;
 //!
 //! #[tokio::main]
@@ -36,7 +36,7 @@
 //!     "BBBSECRET",
 //!  );
 //!  let mut request = CreateMeetingRequest::new("12");
-//!  bbb.execute(&request).await;
+//! client.create_meeting(&request).await;
 //! }
 //! ```
 

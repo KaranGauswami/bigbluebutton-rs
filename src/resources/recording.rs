@@ -31,11 +31,11 @@ impl PublishRecordingsRequest {
     /// Creates new PublishRecordingsRequest
     ///
     /// ```rust,no_run
-    /// # use bigbluebutton::{Bigbluebutton,Execute};
+    /// # use bigbluebutton::Bigbluebutton;
     /// use bigbluebutton::recording::PublishRecordingsRequest;
     /// let client = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
     /// let mut request = PublishRecordingsRequest::new("12", false);
-    /// bbb.execute(&request);
+    /// client.publish_recordings(&request);
     /// ```
     pub fn new(record_id: impl ToString, publish: bool) -> Self {
         Self {
@@ -71,11 +71,11 @@ impl DeleteRecordingsRequest {
     /// Creates new DeleteRecordingsRequest
     ///
     /// ```rust,no_run
-    /// # use bigbluebutton::{Bigbluebutton,Execute};
+    /// # use bigbluebutton::Bigbluebutton;
     /// use bigbluebutton::recording::DeleteRecordingsRequest;
     /// let client = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
     /// let mut request = DeleteRecordingsRequest::new("12");
-    /// bbb.execute(&request);
+    /// client.delete_recordings(&request);
     /// ```
     pub fn new(record_id: impl ToString) -> Self {
         Self {

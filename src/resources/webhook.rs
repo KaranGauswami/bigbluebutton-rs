@@ -54,11 +54,11 @@ impl CreateHookRequest {
     /// Creates new CreateHookRequest
     ///
     /// ```rust,no_run
-    /// # use bigbluebutton::{Bigbluebutton,Execute};
+    /// # use bigbluebutton::Bigbluebutton;
     /// use bigbluebutton::webhook::CreateHookRequest;
     /// let client = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
     /// let mut request = CreateHookRequest::new("http://example.com/callback");
-    /// bbb.execute(&request);
+    /// client.create_hook(&request);
     /// ```
     pub fn new(callback_url: impl ToString) -> Self {
         Self {
@@ -93,11 +93,11 @@ impl DestroyHookRequest {
     /// Creates new DestroyHookRequest
     ///
     /// ```rust
-    /// # use bigbluebutton::{Bigbluebutton,Execute};
+    /// # use bigbluebutton::Bigbluebutton;
     /// use bigbluebutton::webhook::DestroyHookRequest;
     /// let client = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
     /// let mut request = DestroyHookRequest::new("12");
-    /// bbb.execute(&request);
+    /// client.destroy_hook(&request);
     /// ```
     pub fn new(hook_id: impl ToString) -> Self {
         Self {
@@ -175,11 +175,11 @@ impl ListHooksRequest {
     /// Creates new ListHooksRequest
     ///
     /// ```rust
-    /// # use bigbluebutton::{Bigbluebutton,Execute};
+    /// # use bigbluebutton::Bigbluebutton;
     /// use bigbluebutton::webhook::ListHooksRequest;
     /// let client = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
     /// let mut request = ListHooksRequest::new();
-    /// bbb.execute(&request);
+    /// client.list_hooks(&request);
     /// ```
     pub fn new() -> Self {
         Self {

@@ -205,11 +205,11 @@ impl CreateMeetingRequest {
     /// Creates new CreateMeetingRequest
     ///
     /// ```rust
-    /// # use bigbluebutton::{Bigbluebutton,Execute};
+    /// # use bigbluebutton::Bigbluebutton;
     /// use bigbluebutton::administration::CreateMeetingRequest;
     /// let client = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
     /// let mut request = CreateMeetingRequest::new("12");
-    /// bbb.execute(&request);
+    /// client.create_meeting(&request);
     /// ```
     pub fn new(meeting_id: impl ToString) -> Self {
         Self {
