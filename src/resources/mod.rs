@@ -7,13 +7,9 @@ pub mod administration;
 pub mod monitoring;
 
 /// Webhook apis
-///
-/// This requires ```webhook``` feature to be enabled
 #[cfg(feature = "webhook")]
 pub mod webhook;
 
 /// Recordings apis
-///
-/// This requires ```recording``` feature to be enabled
 #[cfg(feature = "recording")]
 pub mod recording;

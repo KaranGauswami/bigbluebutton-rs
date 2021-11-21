@@ -9,6 +9,7 @@ use serde::de::Deserializer;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Default, ApiName)]
+#[serde(rename_all = "camelCase")]
 /// Creates a new webhook
 pub struct CreateHookRequest {
     #[serde(rename = "callbackURL")]
@@ -29,6 +30,7 @@ pub struct CreateHookRequest {
 
 #[derive(Debug, Clone, Deserialize, Getters)]
 #[getset(get = "pub")]
+#[serde(rename_all = "camelCase")]
 /// Response return from [CreateHookRequest]
 pub struct CreateHookResponse {
     #[serde(rename = "returncode")]
@@ -82,6 +84,7 @@ impl Execute<CreateHookRequest, CreateHookResponse> for Bigbluebutton {
 }
 
 #[derive(Debug, Serialize, Deserialize, Default, ApiName)]
+#[serde(rename_all = "camelCase")]
 /// Removes hook. A hookID must be passed in the parameters to identify the hook to be removed.
 pub struct DestroyHookRequest {
     #[serde(rename = "hookID")]
@@ -94,6 +97,7 @@ pub struct DestroyHookRequest {
 
 #[derive(Debug, Clone, Deserialize, Getters)]
 #[getset(get = "pub")]
+#[serde(rename_all = "camelCase")]
 /// Response return from [DestroyHookRequest]
 pub struct DestroyHookResponse {
     /// return code of meeting
@@ -129,6 +133,7 @@ impl Execute<DestroyHookRequest, DestroyHookResponse> for Bigbluebutton {
 }
 
 #[derive(Debug, Serialize, Deserialize, Default, ApiName)]
+#[serde(rename_all = "camelCase")]
 /// Returns the hooks registered. If a meetingID is informed, will return the
 /// hooks created specifically for this meeting plus all the global hooks
 /// (since they also receive events for this meetingID). If no meetingID is informed,
@@ -144,6 +149,7 @@ pub struct ListHooksRequest {
 
 #[derive(Debug, Clone, Deserialize, Getters)]
 #[getset(get = "pub")]
+#[serde(rename_all = "camelCase")]
 /// Response return from [ListHooksRequest]
 pub struct ListHooksResponse {
     /// Return code Success or Failed
@@ -156,6 +162,7 @@ pub struct ListHooksResponse {
 }
 #[derive(Debug, Clone, Deserialize, Getters)]
 #[getset(get = "pub")]
+#[serde(rename_all = "camelCase")]
 /// Webhook Details
 pub struct Hook {
     /// The ID of the webhook
@@ -175,7 +182,6 @@ pub struct Hook {
     permanent_hook: bool,
 
     /// Whether or not data is processed
-    #[serde(rename = "rawData")]
     raw_data: String,
 }
 fn from_hook<'de, D>(deserializer: D) -> Result<Vec<Hook>, D::Error>

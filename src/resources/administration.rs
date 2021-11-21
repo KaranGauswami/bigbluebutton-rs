@@ -8,9 +8,9 @@ use helper::GetApiName;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Default, ApiName)]
+#[serde(rename_all = "camelCase")]
 /// Creates a BigBlueButton meeting.
 pub struct CreateMeetingRequest {
-    #[serde(rename = "name")]
     /// A name for the meeting.
     pub name: Option<String>,
 
@@ -26,19 +26,15 @@ pub struct CreateMeetingRequest {
     /// The password that will join URL can later provide as its password parameter to indicate the user will as a moderator. if no moderatorPW is provided, create will return a randomly generated moderatorPW password for the meeting.
     pub moderator_pw: Option<String>,
 
-    #[serde(rename = "welcome")]
     /// A welcome message that gets displayed on the chat window when the participant joins.
     pub welcome: Option<String>,
 
-    #[serde(rename = "dialNumber")]
     /// The dial access number that participants can call in using regular phone.
     pub dial_number: Option<String>,
 
-    #[serde(rename = "voiceBridge")]
     /// Voice conference number for the FreeSWITCH voice conference associated with this meeting.
     pub voice_bridge: Option<String>,
 
-    #[serde(rename = "maxParticipants")]
     /// Set the maximum number of users allowed to joined the conference at the same time.
     pub max_participants: Option<u64>,
 
@@ -52,7 +48,6 @@ pub struct CreateMeetingRequest {
     /// The maximum length (in minutes) for the meeting.
     pub duration: Option<u64>,
 
-    #[serde(rename = "isBreakout")]
     /// Must be set to true to create a breakout room.
     pub is_breakout: Option<bool>,
 
@@ -63,37 +58,30 @@ pub struct CreateMeetingRequest {
     /// The sequence number of the breakout room.
     pub sequence: Option<u64>,
 
-    #[serde(rename = "freeJoin")]
     /// If set to true, the client will give the user the choice to choose the breakout rooms he wants to join.
     pub free_join: Option<bool>,
 
     /// You can pass one or more metadata values when creating a meeting. These will be stored by BigBlueButton can be retrieved later via the getMeetingInfo and getRecordings calls.
     pub meta: Option<String>,
 
-    #[serde(rename = "moderatorOnlyMessage")]
     /// Display a message to all moderators in the public chat.
     pub moderator_only_message: Option<String>,
 
-    #[serde(rename = "autoStartRecording")]
     /// Whether to automatically start recording when first user joins (default false).
     pub auto_start_recording: Option<bool>,
 
-    #[serde(rename = "allowStartStopRecording")]
     /// Allow the user to start/stop recording. (default true)
     pub allow_start_stop_recording: Option<bool>,
 
-    #[serde(rename = "webcamsOnlyForModerator")]
     /// Setting webcamsOnlyForModerator=true will cause all webcams shared by viewers during this meeting to only appear for moderators
     pub webcams_only_for_moderator: Option<bool>,
 
     /// Setting logo=<http://www.example.com/my-custom-logo.png> will replace the default logo in the Flash client.
     pub logo: Option<String>,
 
-    #[serde(rename = "bannerText")]
     /// Will set the banner text in the client.
     pub banner_text: Option<String>,
 
-    #[serde(rename = "bannerColor")]
     /// Will set the banner background color in the client. The required format is color hex #FFFFFF.
     pub banner_color: Option<String>,
 
@@ -101,46 +89,35 @@ pub struct CreateMeetingRequest {
     pub copyright: Option<String>,
 
     /// Setting muteOnStart=true will mute all users when the meeting starts.
-    #[serde(rename = "muteOnStart")]
     pub mute_on_start: Option<bool>,
 
-    #[serde(rename = "allowModsToUnmuteUsers")]
     /// Default allowModsToUnmuteUsers=false. Setting to allowModsToUnmuteUsers=true will allow moderators to unmute other users in the meeting.
     pub allow_mods_to_unmute_users: Option<bool>,
 
-    #[serde(rename = "lockSettingsDisableCam")]
     /// Default lockSettingsDisableCam=false. Setting lockSettingsDisableCam=true will prevent users from sharing their camera in the meeting.
     pub lock_settings_disable_cam: Option<bool>,
 
-    #[serde(rename = "lockSettingsDisableMic")]
     /// Default lockSettingsDisableMic=false. Setting to lockSettingsDisableMic=true will only allow user to join listen only.
     pub lock_settings_disable_mic: Option<bool>,
 
-    #[serde(rename = "lockSettingsDisablePrivateChat")]
     /// Default lockSettingsDisablePrivateChat=false. Setting to lockSettingsDisablePrivateChat=true will disable private chats in the meeting.
     pub lock_settings_disable_private_chat: Option<bool>,
 
-    #[serde(rename = "lockSettingsDisablePublicChat")]
     /// Default lockSettingsDisablePublicChat=false. Setting to lockSettingsDisablePublicChat=true will disable public chat in the meeting
     pub lock_settings_disable_public_chat: Option<bool>,
 
-    #[serde(rename = "lockSettingsDisableNote")]
     /// Default lockSettingsDisableNote=false. Setting to lockSettingsDisableNote=true will disable notes in the meeting.
     pub lock_settings_disable_note: Option<bool>,
 
-    #[serde(rename = "lockSettingsLockedLayout")]
     /// Default lockSettingsLockedLayout=false. Setting to lockSettingsLockedLayout=true will lock the layout in the meeting.
     pub lock_settings_locked_layout: Option<bool>,
 
-    #[serde(rename = "lockSettingsLockOnJoin")]
     /// Default lockSettingsLockOnJoin=true. Setting to lockSettingsLockOnJoin=false will not apply lock setting to users when they join.
     pub lock_settings_lock_on_join: Option<bool>,
 
-    #[serde(rename = "lockSettingsLockOnJoinConfigurable")]
     /// Default lockSettingsLockOnJoinConfigurable=false. Setting to lockSettingsLockOnJoinConfigurable=true will allow applying of lockSettingsLockOnJoin param.
     pub lock_settings_lock_on_join_configurable: Option<bool>,
 
-    #[serde(rename = "guestPolicy")]
     /// Default guestPolicy=ALWAYS_ACCEPT. Will set the guest policy for the meeting. The guest policy determines whether or not users who send a join request with guest=true will be allowed to join the meeting. Possible values are ALWAYS_ACCEPT, ALWAYS_DENY, and ASK_MODERATOR.
     pub guest_policy: Option<String>,
 
@@ -150,10 +127,11 @@ pub struct CreateMeetingRequest {
 
 #[derive(Debug, Clone, Deserialize, Getters)]
 #[getset(get = "pub")]
+#[serde(rename_all = "camelCase")]
 /// Response return from [CreateMeetingRequest]
 pub struct CreateMeetingResponse {
-    #[serde(rename = "returncode")]
     /// return code of meeting
+    #[serde(rename = "returncode")]
     return_code: ResponseCode,
 
     /// A meeting ID that can be used to identify this meeting by the 3rd-party application.
@@ -171,48 +149,41 @@ pub struct CreateMeetingResponse {
     /// The password that the join URL can later provide as its password parameter to indicate the user will join as a viewer. If no attendeePW is provided, the create call will return a randomly generated attendeePW password for the meeting.
     #[serde(rename = "attendeePW")]
     attendee_pw: String,
+
     /// The password that will join URL can later provide as its password parameter to indicate the user will as a moderator. if no moderatorPW is provided, create will return a randomly generated moderatorPW password for the meeting.
     #[serde(rename = "moderatorPW")]
     moderator_pw: String,
 
     /// Meeting Created time
-    #[serde(rename = "createTime")]
     create_time: u64,
 
     /// Voice conference number for the FreeSWITCH voice conference associated with this meeting.
-    #[serde(rename = "voiceBridge")]
     voice_bridge: String,
 
     /// The dial access number that participants can call in using regular phone.
-    #[serde(rename = "dialNumber")]
     dial_number: String,
 
     /// Create Date
-    #[serde(rename = "createDate")]
     create_date: String,
 
     /// If user is joined or not
-    #[serde(rename = "hasUserJoined")]
     has_user_joined: bool,
 
     /// The maximum length (in minutes) for the meeting.
-    #[serde(rename = "duration")]
     duration: u64,
 
     /// Has been forcibly ended
-    #[serde(rename = "hasBeenForciblyEnded")]
     has_been_forcibly_ended: bool,
 
     /// Message Key
-    #[serde(rename = "messageKey")]
     message_key: String,
 
     /// Message
-    #[serde(rename = "message")]
     message: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Default, ApiName)]
+#[serde(rename_all = "camelCase")]
 /// Use this to forcibly end a meeting and kick all participants out of the meeting.
 pub struct EndMeetingRequest {
     #[serde(rename = "meetingID")]
@@ -227,6 +198,7 @@ pub struct EndMeetingRequest {
 
 #[derive(Debug, Clone, Deserialize, Getters)]
 #[getset(get = "pub")]
+#[serde(rename_all = "camelCase")]
 /// Response return from [EndMeetingRequest]
 pub struct EndMeetingResponse {
     #[serde(rename = "returncode")]
@@ -234,11 +206,9 @@ pub struct EndMeetingResponse {
     pub return_code: ResponseCode,
 
     /// Message Key
-    #[serde(rename = "messageKey")]
     pub message_key: String,
 
     /// Message
-    #[serde(rename = "message")]
     pub message: String,
 }
 

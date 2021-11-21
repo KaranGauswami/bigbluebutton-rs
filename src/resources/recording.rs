@@ -8,6 +8,7 @@ use helper::GetApiName;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Default, ApiName)]
+#[serde(rename_all = "camelCase")]
 /// Creates a BigBlueButton meeting.
 pub struct PublishRecordingsRequest {
     #[serde(rename = "recordID")]
@@ -23,6 +24,7 @@ pub struct PublishRecordingsRequest {
 
 #[derive(Debug, Clone, Deserialize, Getters)]
 #[getset(get = "pub")]
+#[serde(rename_all = "camelCase")]
 /// Response return from [PublishRecordingsResponse]
 pub struct PublishRecordingsResponse {
     #[serde(rename = "returncode")]
@@ -62,6 +64,7 @@ impl Execute<PublishRecordingsRequest, PublishRecordingsResponse> for Bigbluebut
 }
 
 #[derive(Debug, Serialize, Deserialize, Default, ApiName)]
+#[serde(rename_all = "camelCase")]
 ///Delete one or more recordings for a given recordID (or set of record IDs).
 
 pub struct DeleteRecordingsRequest {
@@ -75,6 +78,7 @@ pub struct DeleteRecordingsRequest {
 
 #[derive(Debug, Clone, Deserialize, Getters)]
 #[getset(get = "pub")]
+#[serde(rename_all = "camelCase")]
 /// Response return from [DeleteRecordingsRequest]
 pub struct DeleteRecordingsResponse {
     #[serde(rename = "returncode")]
