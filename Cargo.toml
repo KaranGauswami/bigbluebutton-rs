@@ -2,7 +2,7 @@
 name = "bigbluebutton"
 version = "0.2.3"
 authors = ["KaranGauswami <karangauswami.dev@gmail.com>"]
-edition = "2018"
+edition = "2021"
 description = "Rust Crate for interacting with BBB APIs."
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/KaranGauswami/bigbluebutton-rs"
