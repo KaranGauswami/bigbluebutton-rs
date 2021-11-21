@@ -1,22 +1,17 @@
 use crate::error::ResponseCode;
 use crate::{helper, Bigbluebutton, Execute};
 use async_trait::async_trait;
-use bbb_macro::ApiName;
 use getset::Getters;
-use helper::GetApiName;
 use serde::de::Deserializer;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Default, ApiName)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 /// This call enables you to simply check on whether or not a meeting is running by looking it up with your meeting ID.
 pub struct IsMeetingRunningRequest {
     #[serde(rename = "meetingID")]
     /// The meeting ID that identifies the meeting you are attempting to check on.
     meeting_id: String,
-
-    #[serde(skip)]
-    api_name: String,
 }
 
 #[derive(Debug, Clone, Deserialize, Getters)]
@@ -36,7 +31,6 @@ impl IsMeetingRunningRequest {
     pub fn new(meeting_id: impl ToString) -> Self {
         Self {
             meeting_id: meeting_id.to_string(),
-            api_name: "isMeetingRunning".to_string(),
         }
     }
 }
@@ -47,17 +41,14 @@ impl Execute<IsMeetingRunningRequest, IsMeetingRunningResponse> for Bigbluebutto
         &self,
         request: &IsMeetingRunningRequest,
     ) -> anyhow::Result<IsMeetingRunningResponse> {
-        self.dispatch(request).await
+        self.dispatch("isMeetingRunning", request).await
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, ApiName)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 /// This call will return a list of all the meetings found on this server.
-pub struct GetMeetingsRequest {
-    #[serde(skip)]
-    api_name: String,
-}
+pub struct GetMeetingsRequest {}
 
 #[derive(Debug, Serialize, Deserialize, Clone, Getters)]
 #[getset(get = "pub")]
@@ -208,29 +199,24 @@ where
 impl GetMeetingsRequest {
     /// Creates new GetMeetingsRequest
     pub fn new() -> Self {
-        Self {
-            api_name: "getMeetings".to_string(),
-        }
+        Self {}
     }
 }
 
 #[async_trait]
 impl Execute<GetMeetingsRequest, GetMeetingsResponse> for Bigbluebutton {
     async fn execute(&self, request: &GetMeetingsRequest) -> anyhow::Result<GetMeetingsResponse> {
-        self.dispatch(request).await
+        self.dispatch("getMeetings", request).await
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, ApiName)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 /// This call will return all of a meeting’s information, including the list of attendees as well as start and end times.
 pub struct GetMeetingInfoRequest {
     #[serde(rename = "meetingID")]
     /// The meeting ID that identifies the meeting you are attempting to check on.
     pub meeting_id: Option<String>,
-
-    #[serde(skip)]
-    api_name: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Default, Clone, Getters)]
@@ -326,7 +312,6 @@ impl GetMeetingInfoRequest {
     /// Creates new GetMeetingsRequest
     pub fn new() -> Self {
         Self {
-            api_name: "getMeetingInfo".to_string(),
             ..Default::default()
         }
     }
@@ -338,7 +323,7 @@ impl Execute<GetMeetingInfoRequest, GetMeetingInfoResponse> for Bigbluebutton {
         &self,
         request: &GetMeetingInfoRequest,
     ) -> anyhow::Result<GetMeetingInfoResponse> {
-        self.dispatch(request).await
+        self.dispatch("getMeetingInfo", request).await
     }
 }
 

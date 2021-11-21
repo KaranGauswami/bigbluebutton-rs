@@ -2,13 +2,11 @@ use crate::error::ResponseCode;
 use crate::Bigbluebutton;
 use crate::{helper, Execute};
 use async_trait::async_trait;
-use bbb_macro::ApiName;
 use getset::Getters;
-use helper::GetApiName;
 use serde::de::Deserializer;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Default, ApiName)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 /// Creates a new webhook
 pub struct CreateHookRequest {
@@ -23,9 +21,6 @@ pub struct CreateHookRequest {
     #[serde(rename = "getRaw")]
     /// False by default. When getRaw=true, the POST call will contain the exact same message sent on redis, otherwise the message will be processed.
     pub get_raw: Option<bool>,
-
-    #[serde(skip)]
-    api_name: String,
 }
 
 #[derive(Debug, Clone, Deserialize, Getters)]
@@ -70,7 +65,6 @@ impl CreateHookRequest {
     pub fn new(callback_url: impl ToString) -> Self {
         Self {
             callback_url: callback_url.to_string(),
-            api_name: "hooks/create".to_string(),
             ..Default::default()
         }
     }
@@ -79,20 +73,17 @@ impl CreateHookRequest {
 #[async_trait]
 impl Execute<CreateHookRequest, CreateHookResponse> for Bigbluebutton {
     async fn execute(&self, request: &CreateHookRequest) -> anyhow::Result<CreateHookResponse> {
-        self.dispatch(request).await
+        self.dispatch("hooks/create", request).await
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, ApiName)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 /// Removes hook. A hookID must be passed in the parameters to identify the hook to be removed.
 pub struct DestroyHookRequest {
     #[serde(rename = "hookID")]
     /// The ID of the hook that should be removed, as returned in the create hook call.
     pub hook_id: String,
-
-    #[serde(skip)]
-    api_name: String,
 }
 
 #[derive(Debug, Clone, Deserialize, Getters)]
@@ -120,7 +111,6 @@ impl DestroyHookRequest {
     pub fn new(hook_id: impl ToString) -> Self {
         Self {
             hook_id: hook_id.to_string(),
-            api_name: "hooks/destroy".to_string(),
         }
     }
 }
@@ -128,11 +118,11 @@ impl DestroyHookRequest {
 #[async_trait]
 impl Execute<DestroyHookRequest, DestroyHookResponse> for Bigbluebutton {
     async fn execute(&self, request: &DestroyHookRequest) -> anyhow::Result<DestroyHookResponse> {
-        self.dispatch(request).await
+        self.dispatch("hooks/destroy", request).await
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, ApiName)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 /// Returns the hooks registered. If a meetingID is informed, will return the
 /// hooks created specifically for this meeting plus all the global hooks
@@ -142,9 +132,6 @@ pub struct ListHooksRequest {
     #[serde(rename = "meetingID")]
     /// A meeting ID to restrict the hooks returned only to the hooks that receive events for this meeting.
     pub meeting_id: Option<String>,
-
-    #[serde(skip)]
-    api_name: String,
 }
 
 #[derive(Debug, Clone, Deserialize, Getters)]
@@ -212,7 +199,6 @@ impl ListHooksRequest {
     /// ```
     pub fn new() -> Self {
         Self {
-            api_name: "hooks/list".to_string(),
             ..Default::default()
         }
     }
@@ -221,6 +207,6 @@ impl ListHooksRequest {
 #[async_trait]
 impl Execute<ListHooksRequest, ListHooksResponse> for Bigbluebutton {
     async fn execute(&self, request: &ListHooksRequest) -> anyhow::Result<ListHooksResponse> {
-        self.dispatch(request).await
+        self.dispatch("hooks/list", request).await
     }
 }

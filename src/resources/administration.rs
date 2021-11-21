@@ -2,12 +2,10 @@ use crate::error::ResponseCode;
 use crate::Bigbluebutton;
 use crate::{helper, Execute};
 use async_trait::async_trait;
-use bbb_macro::ApiName;
 use getset::Getters;
-use helper::GetApiName;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Default, ApiName)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 /// Creates a BigBlueButton meeting.
 pub struct CreateMeetingRequest {
@@ -120,9 +118,6 @@ pub struct CreateMeetingRequest {
 
     /// Default guestPolicy=ALWAYS_ACCEPT. Will set the guest policy for the meeting. The guest policy determines whether or not users who send a join request with guest=true will be allowed to join the meeting. Possible values are ALWAYS_ACCEPT, ALWAYS_DENY, and ASK_MODERATOR.
     pub guest_policy: Option<String>,
-
-    #[serde(skip)]
-    api_name: String,
 }
 
 #[derive(Debug, Clone, Deserialize, Getters)]
@@ -182,7 +177,7 @@ pub struct CreateMeetingResponse {
     message: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, ApiName)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 /// Use this to forcibly end a meeting and kick all participants out of the meeting.
 pub struct EndMeetingRequest {
@@ -191,9 +186,6 @@ pub struct EndMeetingRequest {
     pub meeting_id: String,
     /// The moderator password for this meeting. You can not end a meeting using the attendee password.
     pub password: String,
-
-    #[serde(skip)]
-    api_name: String,
 }
 
 #[derive(Debug, Clone, Deserialize, Getters)]
@@ -225,7 +217,6 @@ impl CreateMeetingRequest {
     pub fn new(meeting_id: impl ToString) -> Self {
         Self {
             meeting_id: meeting_id.to_string(),
-            api_name: "create".to_string(),
             ..Default::default()
         }
     }
@@ -237,7 +228,6 @@ impl EndMeetingRequest {
         Self {
             meeting_id: meeting_id.to_string(),
             password: password.to_string(),
-            api_name: "end".to_string(),
         }
     }
 }
@@ -248,13 +238,13 @@ impl Execute<CreateMeetingRequest, CreateMeetingResponse> for Bigbluebutton {
         &self,
         request: &CreateMeetingRequest,
     ) -> anyhow::Result<CreateMeetingResponse> {
-        self.dispatch(request).await
+        self.dispatch("create", request).await
     }
 }
 
 #[async_trait]
 impl Execute<EndMeetingRequest, EndMeetingResponse> for Bigbluebutton {
     async fn execute(&self, request: &EndMeetingRequest) -> anyhow::Result<EndMeetingResponse> {
-        self.dispatch(request).await
+        self.dispatch("end", request).await
     }
 }

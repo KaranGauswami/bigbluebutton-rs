@@ -46,7 +46,6 @@ mod helper;
 mod resources;
 
 use async_trait::async_trait;
-use helper::GetApiName;
 
 #[cfg(feature = "administration")]
 pub use resources::administration;
@@ -76,35 +75,35 @@ impl Bigbluebutton {
         }
     }
 
-    fn create_api_url<T>(&self, request: &T) -> anyhow::Result<String>
+    fn create_api_url<T>(&self, api_path: &str, request: &T) -> anyhow::Result<String>
     where
-        T: serde::Serialize + GetApiName,
+        T: serde::Serialize,
     {
-        let action = request.get_api_name();
+        
         let query_params = serde_qs::to_string(request)?;
-        let checksum = self::Bigbluebutton::hash(vec![action, &query_params, &self.salt]);
+        let checksum = self::Bigbluebutton::hash(vec![api_path, &query_params, &self.salt]);
         Ok(format!(
             "{}{}?{}&checksum={}",
-            self.url, action, query_params, checksum
+            self.url, api_path, query_params, checksum
         ))
     }
 
     /// Generates BBB URL with checksum to interact with BBB server
-    pub fn generate_url(&self, action: &str, params: Vec<(&str, &str)>) -> String {
+    pub fn generate_url(&self, api_path: &str, params: Vec<(&str, &str)>) -> String {
         let query_params = self::Bigbluebutton::serialize_params(params);
-        let checksum = self::Bigbluebutton::hash(vec![action, &query_params, &self.salt]);
+        let checksum = self::Bigbluebutton::hash(vec![api_path, &query_params, &self.salt]);
         format!(
             "{}{}?{}&checksum={}",
-            self.url, action, query_params, checksum
+            self.url, api_path, query_params, checksum
         )
     }
 
-    pub(crate) async fn dispatch<'a, R, T>(&self, request: &R) -> anyhow::Result<T>
+    pub(crate) async fn dispatch<'a, R, T>(&self, api_path: &str, request: &R) -> anyhow::Result<T>
     where
-        R: GetApiName + serde::Serialize,
+        R: serde::Serialize,
         T: serde::Deserialize<'a>,
     {
-        let url = self.create_api_url(request)?;
+        let url = self.create_api_url(api_path, request)?;
         let text_response = reqwest::get(&url).await?.text().await?;
         let return_response;
         if text_response.contains("SUCCESS") {

@@ -30,6 +30,3 @@ impl Bigbluebutton {
         collection.join("&")
     }
 }
-pub(crate) trait GetApiName {
-    fn get_api_name(&self) -> &str;
-}

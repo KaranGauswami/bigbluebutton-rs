@@ -2,12 +2,10 @@ use crate::error::ResponseCode;
 use crate::Bigbluebutton;
 use crate::{helper, Execute};
 use async_trait::async_trait;
-use bbb_macro::ApiName;
 use getset::Getters;
-use helper::GetApiName;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Default, ApiName)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 /// Creates a BigBlueButton meeting.
 pub struct PublishRecordingsRequest {
@@ -17,9 +15,6 @@ pub struct PublishRecordingsRequest {
 
     /// A meetingID to bind this hook to an specific meeting. If not informed, the hook will receive events for all meetings.
     pub publish: bool,
-
-    #[serde(skip)]
-    api_name: String,
 }
 
 #[derive(Debug, Clone, Deserialize, Getters)]
@@ -48,7 +43,6 @@ impl PublishRecordingsRequest {
         Self {
             record_id: record_id.to_string(),
             publish,
-            api_name: "publishRecordings".to_string(),
         }
     }
 }
@@ -59,11 +53,11 @@ impl Execute<PublishRecordingsRequest, PublishRecordingsResponse> for Bigbluebut
         &self,
         request: &PublishRecordingsRequest,
     ) -> anyhow::Result<PublishRecordingsResponse> {
-        self.dispatch(request).await
+        self.dispatch("publishRecordings", request).await
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, ApiName)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 ///Delete one or more recordings for a given recordID (or set of record IDs).
 
@@ -71,9 +65,6 @@ pub struct DeleteRecordingsRequest {
     #[serde(rename = "recordID")]
     /// A record ID for specify the recordings to delete. It can be a set of record IDs separated by commas.
     pub record_id: String,
-
-    #[serde(skip)]
-    api_name: String,
 }
 
 #[derive(Debug, Clone, Deserialize, Getters)]
@@ -101,7 +92,6 @@ impl DeleteRecordingsRequest {
     pub fn new(record_id: impl ToString) -> Self {
         Self {
             record_id: record_id.to_string(),
-            api_name: "deleteRecordings".to_string(),
         }
     }
 }
@@ -112,6 +102,6 @@ impl Execute<DeleteRecordingsRequest, DeleteRecordingsResponse> for Bigbluebutto
         &self,
         request: &DeleteRecordingsRequest,
     ) -> anyhow::Result<DeleteRecordingsResponse> {
-        self.dispatch(request).await
+        self.dispatch("deleteRecordings", request).await
     }
 }

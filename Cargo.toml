@@ -15,7 +15,6 @@ serde_qs = "0.8"
 reqwest = "0.11"
 serde-xml-rs = "0.4"
 async-trait = "0.1"
-bbb-macro = { path = "./bbb-macro" }
 anyhow = "1.0"
 getset = "0.1"
 sha-1 = { version = "0.9", optional = true }
@@ -30,8 +29,6 @@ administration = []
 webhook = ["sha-1"]
 recording = []
 
-[workspace]
-members = ["bbb-macro"]
 
 [[example]]
 name = "webhook"
