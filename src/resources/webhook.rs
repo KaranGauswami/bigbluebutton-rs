@@ -1,7 +1,5 @@
 use crate::error::ResponseCode;
 use crate::Bigbluebutton;
-use crate::Execute;
-use async_trait::async_trait;
 use getset::Getters;
 use serde::de::Deserializer;
 use serde::{Deserialize, Serialize};
@@ -58,7 +56,7 @@ impl CreateHookRequest {
     /// ```rust,no_run
     /// # use bigbluebutton::{Bigbluebutton,Execute};
     /// use bigbluebutton::webhook::CreateHookRequest;
-    /// let bbb = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
+    /// let client = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
     /// let mut request = CreateHookRequest::new("http://example.com/callback");
     /// bbb.execute(&request);
     /// ```
@@ -67,13 +65,6 @@ impl CreateHookRequest {
             callback_url: callback_url.to_string(),
             ..Default::default()
         }
-    }
-}
-
-#[async_trait]
-impl Execute<CreateHookRequest, CreateHookResponse> for Bigbluebutton {
-    async fn execute(&self, request: &CreateHookRequest) -> anyhow::Result<CreateHookResponse> {
-        self.dispatch("hooks/create", request).await
     }
 }
 
@@ -104,7 +95,7 @@ impl DestroyHookRequest {
     /// ```rust
     /// # use bigbluebutton::{Bigbluebutton,Execute};
     /// use bigbluebutton::webhook::DestroyHookRequest;
-    /// let bbb = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
+    /// let client = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
     /// let mut request = DestroyHookRequest::new("12");
     /// bbb.execute(&request);
     /// ```
@@ -112,13 +103,6 @@ impl DestroyHookRequest {
         Self {
             hook_id: hook_id.to_string(),
         }
-    }
-}
-
-#[async_trait]
-impl Execute<DestroyHookRequest, DestroyHookResponse> for Bigbluebutton {
-    async fn execute(&self, request: &DestroyHookRequest) -> anyhow::Result<DestroyHookResponse> {
-        self.dispatch("hooks/destroy", request).await
     }
 }
 
@@ -193,7 +177,7 @@ impl ListHooksRequest {
     /// ```rust
     /// # use bigbluebutton::{Bigbluebutton,Execute};
     /// use bigbluebutton::webhook::ListHooksRequest;
-    /// let bbb = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
+    /// let client = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
     /// let mut request = ListHooksRequest::new();
     /// bbb.execute(&request);
     /// ```
@@ -204,9 +188,23 @@ impl ListHooksRequest {
     }
 }
 
-#[async_trait]
-impl Execute<ListHooksRequest, ListHooksResponse> for Bigbluebutton {
-    async fn execute(&self, request: &ListHooksRequest) -> anyhow::Result<ListHooksResponse> {
-        self.dispatch("hooks/list", request).await
+impl Bigbluebutton {
+    pub async fn create_hook(
+        &self,
+        req: &CreateHookRequest,
+    ) -> Result<CreateHookResponse, anyhow::Error> {
+        self.dispatch("hooks/create", req).await
+    }
+    pub async fn list_hooks(
+        &self,
+        req: &ListHooksRequest,
+    ) -> Result<ListHooksResponse, anyhow::Error> {
+        self.dispatch("hooks/list", req).await
+    }
+    pub async fn destroy_hook(
+        &self,
+        req: &DestroyHookRequest,
+    ) -> Result<DestroyHookResponse, anyhow::Error> {
+        self.dispatch("hooks/destroy", req).await
     }
 }

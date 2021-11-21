@@ -1,6 +1,5 @@
 use crate::error::ResponseCode;
-use crate::{Bigbluebutton, Execute};
-use async_trait::async_trait;
+use crate::Bigbluebutton;
 use getset::Getters;
 use serde::de::Deserializer;
 use serde::{Deserialize, Serialize};
@@ -32,16 +31,6 @@ impl IsMeetingRunningRequest {
         Self {
             meeting_id: meeting_id.to_string(),
         }
-    }
-}
-
-#[async_trait]
-impl Execute<IsMeetingRunningRequest, IsMeetingRunningResponse> for Bigbluebutton {
-    async fn execute(
-        &self,
-        request: &IsMeetingRunningRequest,
-    ) -> anyhow::Result<IsMeetingRunningResponse> {
-        self.dispatch("isMeetingRunning", request).await
     }
 }
 
@@ -203,13 +192,6 @@ impl GetMeetingsRequest {
     }
 }
 
-#[async_trait]
-impl Execute<GetMeetingsRequest, GetMeetingsResponse> for Bigbluebutton {
-    async fn execute(&self, request: &GetMeetingsRequest) -> anyhow::Result<GetMeetingsResponse> {
-        self.dispatch("getMeetings", request).await
-    }
-}
-
 #[derive(Debug, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 /// This call will return all of a meeting’s information, including the list of attendees as well as start and end times.
@@ -317,16 +299,6 @@ impl GetMeetingInfoRequest {
     }
 }
 
-#[async_trait]
-impl Execute<GetMeetingInfoRequest, GetMeetingInfoResponse> for Bigbluebutton {
-    async fn execute(
-        &self,
-        request: &GetMeetingInfoRequest,
-    ) -> anyhow::Result<GetMeetingInfoResponse> {
-        self.dispatch("getMeetingInfo", request).await
-    }
-}
-
 fn from_attendee<'de, D>(deserializer: D) -> Result<Vec<Attendee>, D::Error>
 where
     D: Deserializer<'de>,
@@ -341,5 +313,26 @@ where
         Ok(value)
     } else {
         Ok(Vec::new())
+    }
+}
+
+impl Bigbluebutton {
+    pub async fn is_meeting_running(
+        &self,
+        req: &IsMeetingRunningRequest,
+    ) -> Result<IsMeetingRunningResponse, anyhow::Error> {
+        self.dispatch("isMeetingRunning", req).await
+    }
+    pub async fn get_meeting_info(
+        &self,
+        req: &GetMeetingInfoRequest,
+    ) -> Result<GetMeetingInfoResponse, anyhow::Error> {
+        self.dispatch("getMeetingInfo", req).await
+    }
+    pub async fn get_meetings(
+        &self,
+        req: &GetMeetingsRequest,
+    ) -> Result<GetMeetingsResponse, anyhow::Error> {
+        self.dispatch("getMeetings", req).await
     }
 }

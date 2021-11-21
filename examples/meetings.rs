@@ -1,7 +1,7 @@
 #![allow(unused_variables)]
 // Create Meeting Example
 use bigbluebutton::administration::CreateMeetingRequest;
-use bigbluebutton::{Bigbluebutton, Execute};
+use bigbluebutton::Bigbluebutton;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -10,7 +10,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let bbb_secret = std::env::var("BBB_SECRET").expect("BBB_SECRET is not set");
 
     // create new client
-    let bbb = Bigbluebutton::new(&bbb_url, &bbb_secret);
+    let client = Bigbluebutton::new(&bbb_url, &bbb_secret);
 
     // create new meeting request
     let mut request = CreateMeetingRequest::new("12");
@@ -19,7 +19,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     request.record = Some(true);
 
     // execute new meeting request
-    let response = bbb.execute(&request).await?;
+    let response = client.create_meeting(&request).await?;
 
     eprintln!("{:?}", response);
 

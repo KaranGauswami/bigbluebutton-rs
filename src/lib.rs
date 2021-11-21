@@ -1,4 +1,4 @@
-#![deny(missing_docs, rust_2018_idioms)]
+// #![deny(missing_docs, rust_2018_idioms)]
 //! BigBlueButton is an open source web conferencing system for online learning.
 //!
 //! This crate provides interface for interacting with Bigbluebutton APIs.
@@ -10,7 +10,7 @@
 //! # use bigbluebutton::Bigbluebutton;
 //!
 //! // Creates new BBB Instance
-//! let bbb = Bigbluebutton::new(
+//! let client = Bigbluebutton::new(
 //!     "https://example.com/bigbluebutton/",
 //!     "BBBSECRET",
 //!  );
@@ -31,7 +31,7 @@
 //!
 //! #[tokio::main]
 //! async fn main(){
-//! # let bbb = Bigbluebutton::new(
+//! # let client = Bigbluebutton::new(
 //!     "https://example.com/bigbluebutton/",
 //!     "BBBSECRET",
 //!  );
@@ -44,8 +44,6 @@
 pub mod error;
 mod helper;
 mod resources;
-
-use async_trait::async_trait;
 
 #[cfg(feature = "administration")]
 pub use resources::administration;
@@ -79,7 +77,6 @@ impl Bigbluebutton {
     where
         T: serde::Serialize,
     {
-        
         let query_params = serde_qs::to_string(request)?;
         let checksum = self::Bigbluebutton::hash(vec![api_path, &query_params, &self.salt]);
         Ok(format!(
@@ -114,11 +111,4 @@ impl Bigbluebutton {
         }
         return_response
     }
-}
-
-#[async_trait]
-/// execute trait method for executing API requests
-pub trait Execute<T, E> {
-    /// trait function to execute requests
-    async fn execute(&self, request: &T) -> anyhow::Result<E>;
 }

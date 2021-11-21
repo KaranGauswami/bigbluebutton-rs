@@ -1,7 +1,4 @@
-use crate::error::ResponseCode;
-use crate::Bigbluebutton;
-use crate::Execute;
-use async_trait::async_trait;
+use crate::{error::ResponseCode, Bigbluebutton};
 use getset::Getters;
 use serde::{Deserialize, Serialize};
 
@@ -210,7 +207,7 @@ impl CreateMeetingRequest {
     /// ```rust
     /// # use bigbluebutton::{Bigbluebutton,Execute};
     /// use bigbluebutton::administration::CreateMeetingRequest;
-    /// let bbb = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
+    /// let client = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
     /// let mut request = CreateMeetingRequest::new("12");
     /// bbb.execute(&request);
     /// ```
@@ -232,19 +229,17 @@ impl EndMeetingRequest {
     }
 }
 
-#[async_trait]
-impl Execute<CreateMeetingRequest, CreateMeetingResponse> for Bigbluebutton {
-    async fn execute(
+impl Bigbluebutton {
+    pub async fn create_meeting(
         &self,
-        request: &CreateMeetingRequest,
-    ) -> anyhow::Result<CreateMeetingResponse> {
-        self.dispatch("create", request).await
+        req: &CreateMeetingRequest,
+    ) -> Result<CreateMeetingResponse, anyhow::Error> {
+        self.dispatch("create", req).await
     }
-}
-
-#[async_trait]
-impl Execute<EndMeetingRequest, EndMeetingResponse> for Bigbluebutton {
-    async fn execute(&self, request: &EndMeetingRequest) -> anyhow::Result<EndMeetingResponse> {
-        self.dispatch("end", request).await
+    pub async fn end_meeting(
+        &self,
+        req: &EndMeetingRequest,
+    ) -> Result<EndMeetingResponse, anyhow::Error> {
+        self.dispatch("end", req).await
     }
 }

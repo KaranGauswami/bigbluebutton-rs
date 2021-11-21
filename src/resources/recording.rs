@@ -1,7 +1,5 @@
 use crate::error::ResponseCode;
 use crate::Bigbluebutton;
-use crate::Execute;
-use async_trait::async_trait;
 use getset::Getters;
 use serde::{Deserialize, Serialize};
 
@@ -35,7 +33,7 @@ impl PublishRecordingsRequest {
     /// ```rust,no_run
     /// # use bigbluebutton::{Bigbluebutton,Execute};
     /// use bigbluebutton::recording::PublishRecordingsRequest;
-    /// let bbb = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
+    /// let client = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
     /// let mut request = PublishRecordingsRequest::new("12", false);
     /// bbb.execute(&request);
     /// ```
@@ -44,16 +42,6 @@ impl PublishRecordingsRequest {
             record_id: record_id.to_string(),
             publish,
         }
-    }
-}
-
-#[async_trait]
-impl Execute<PublishRecordingsRequest, PublishRecordingsResponse> for Bigbluebutton {
-    async fn execute(
-        &self,
-        request: &PublishRecordingsRequest,
-    ) -> anyhow::Result<PublishRecordingsResponse> {
-        self.dispatch("publishRecordings", request).await
     }
 }
 
@@ -85,7 +73,7 @@ impl DeleteRecordingsRequest {
     /// ```rust,no_run
     /// # use bigbluebutton::{Bigbluebutton,Execute};
     /// use bigbluebutton::recording::DeleteRecordingsRequest;
-    /// let bbb = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
+    /// let client = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
     /// let mut request = DeleteRecordingsRequest::new("12");
     /// bbb.execute(&request);
     /// ```
@@ -96,12 +84,17 @@ impl DeleteRecordingsRequest {
     }
 }
 
-#[async_trait]
-impl Execute<DeleteRecordingsRequest, DeleteRecordingsResponse> for Bigbluebutton {
-    async fn execute(
+impl Bigbluebutton {
+    pub async fn delete_recordings(
         &self,
-        request: &DeleteRecordingsRequest,
-    ) -> anyhow::Result<DeleteRecordingsResponse> {
-        self.dispatch("deleteRecordings", request).await
+        req: &DeleteRecordingsRequest,
+    ) -> Result<DeleteRecordingsResponse, anyhow::Error> {
+        self.dispatch("deleteRecordings", req).await
+    }
+    pub async fn publish_recordings(
+        &self,
+        req: &PublishRecordingsRequest,
+    ) -> Result<PublishRecordingsResponse, anyhow::Error> {
+        self.dispatch("publishRecordings", req).await
     }
 }
