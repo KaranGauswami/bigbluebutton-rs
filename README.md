@@ -19,7 +19,7 @@ More details can be found [here](https://docs.bigbluebutton.org/dev/api.html).
 use bigbluebutton::Bigbluebutton;
 
 // Creates new BBB Instance
-let bbb = Bigbluebutton::new(
+let client = Bigbluebutton::new(
     "https://example.com/bigbluebutton/",
     "BBBSECRET",
   );
@@ -44,13 +44,13 @@ use bigbluebutton::{Bigbluebutton, Execute};
 
 #[tokio::main]
 async fn main() {
-    let bbb = Bigbluebutton::new("https://example.com/bigbluebutton/", "secret");
+    let client = Bigbluebutton::new("https://example.com/bigbluebutton/", "secret");
     let mut request = CreateMeetingRequest::new();
     request.meeting_id = Some("12".to_string());
     request.moderator_pw = Some("modp".to_string());
     request.attandee_pw = Some("akarr".to_string());
 
-    let _response = bbb.execute(&request).await;
+    let _response = bbb.create_meeting(&request).await;
 }
 ```
 

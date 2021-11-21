@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod test {
     use bigbluebutton::administration::{CreateMeetingRequest, EndMeetingRequest};
-    use bigbluebutton::{Bigbluebutton, Execute};
+    use bigbluebutton::Bigbluebutton;
     use std::env::var;
 
     #[tokio::test]
@@ -9,7 +9,7 @@ mod test {
     async fn create_meeting() {
         let bbb_url = var("BBB_URL").expect("BBB_URL is not set");
         let bbb_secret = var("BBB_SECRET").expect("BBB_SECRET is not set");
-        let bbb = Bigbluebutton::new(&bbb_url, &bbb_secret);
+        let client = Bigbluebutton::new(&bbb_url, &bbb_secret);
 
         let meeting_id = "1".to_string();
         let attendee_pw = "attendeep".to_string();
@@ -26,8 +26,8 @@ mod test {
         request.dial_number = Some(dial_number.clone());
         request.duration = Some(duration.clone());
 
-        let response = bbb
-            .execute(&request)
+        let response = client
+            .create_meeting(&request)
             .await
             .expect("Unable to parse CreateMeetingResponse");
         assert_eq!(response.meeting_id(), &meeting_id);
@@ -43,16 +43,16 @@ mod test {
     async fn end_meeting() {
         let bbb_url = var("BBB_URL").expect("BBB_URL is not set");
         let bbb_secret = var("BBB_SECRET").expect("BBB_SECRET is not set");
-        let bbb = Bigbluebutton::new(&bbb_url, &bbb_secret);
+        let client = Bigbluebutton::new(&bbb_url, &bbb_secret);
 
         let mut req = CreateMeetingRequest::new("2");
         req.moderator_pw = Some("modp".to_string());
-        let _ = bbb.execute(&req).await;
+        let _ = client.create_meeting(&req).await;
 
         let req = EndMeetingRequest::new("2", "modp");
 
-        let response = bbb
-            .execute(&req)
+        let response = client
+            .end_meeting(&req)
             .await
             .expect("Unable to parse EndMeetingResponse");
         println!("{:?}", response);
