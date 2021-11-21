@@ -4,7 +4,7 @@ use getset::Getters;
 use serde::de::Deserializer;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 /// This call enables you to simply check on whether or not a meeting is running by looking it up with your meeting ID.
 pub struct IsMeetingRunningRequest {
@@ -34,12 +34,12 @@ impl IsMeetingRunningRequest {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 /// This call will return a list of all the meetings found on this server.
 pub struct GetMeetingsRequest {}
 
-#[derive(Debug, Serialize, Deserialize, Clone, Getters)]
+#[derive(Debug, Clone, Serialize, Deserialize, Getters)]
 #[getset(get = "pub")]
 #[serde(rename_all = "camelCase")]
 /// Attendee Details
@@ -70,7 +70,7 @@ pub struct Attendee {
     client_type: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, Clone, Getters)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Getters)]
 #[getset(get = "pub")]
 #[serde(rename_all = "camelCase")]
 /// Meeting details
@@ -192,7 +192,7 @@ impl GetMeetingsRequest {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 /// This call will return all of a meeting’s information, including the list of attendees as well as start and end times.
 pub struct GetMeetingInfoRequest {
@@ -201,7 +201,7 @@ pub struct GetMeetingInfoRequest {
     pub meeting_id: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, Clone, Getters)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Getters)]
 #[getset(get = "pub")]
 #[serde(rename_all = "camelCase")]
 /// Response return from [GetMeetingInfoRequest]

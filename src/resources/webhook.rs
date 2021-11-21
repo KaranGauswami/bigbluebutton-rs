@@ -4,7 +4,7 @@ use getset::Getters;
 use serde::de::Deserializer;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 /// Creates a new webhook
 pub struct CreateHookRequest {
@@ -68,7 +68,7 @@ impl CreateHookRequest {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 /// Removes hook. A hookID must be passed in the parameters to identify the hook to be removed.
 pub struct DestroyHookRequest {
@@ -106,7 +106,7 @@ impl DestroyHookRequest {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 /// Returns the hooks registered. If a meetingID is informed, will return the
 /// hooks created specifically for this meeting plus all the global hooks

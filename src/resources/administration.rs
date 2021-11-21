@@ -2,7 +2,7 @@ use crate::{error::ResponseCode, Bigbluebutton};
 use getset::Getters;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 /// Creates a BigBlueButton meeting.
 pub struct CreateMeetingRequest {
@@ -174,7 +174,7 @@ pub struct CreateMeetingResponse {
     message: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 /// Use this to forcibly end a meeting and kick all participants out of the meeting.
 pub struct EndMeetingRequest {

@@ -58,6 +58,7 @@ pub use resources::webhook;
 pub use resources::recording;
 
 /// Implementation of Bigbluebutton APIs
+#[derive(Debug, Clone)]
 pub struct Bigbluebutton {
     salt: String,
     url: String,

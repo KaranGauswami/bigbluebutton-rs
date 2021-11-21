@@ -10,7 +10,7 @@ pub enum ResponseCode {
     FAILED,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 /// Custom error type for API Requests
 pub struct BBBError {
     #[serde(rename = "returncode")]

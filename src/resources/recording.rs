@@ -3,7 +3,7 @@ use crate::Bigbluebutton;
 use getset::Getters;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 /// Creates a BigBlueButton meeting.
 pub struct PublishRecordingsRequest {
@@ -45,7 +45,7 @@ impl PublishRecordingsRequest {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 ///Delete one or more recordings for a given recordID (or set of record IDs).
 
