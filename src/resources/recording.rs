@@ -41,7 +41,7 @@ impl PublishRecordingsRequest {
     /// # use bigbluebutton::{Bigbluebutton,Execute};
     /// use bigbluebutton::recording::PublishRecordingsRequest;
     /// let bbb = Bigbluebutton::new("https://server.com/bigbluebutton/", "secret");
-    /// let mut request = PublishRecordingsRequest::new("12",false);
+    /// let mut request = PublishRecordingsRequest::new("12", false);
     /// bbb.execute(&request);
     /// ```
     pub fn new(record_id: impl ToString, publish: bool) -> Self {
