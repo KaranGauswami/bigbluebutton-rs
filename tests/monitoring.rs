@@ -12,8 +12,8 @@ mod test {
         let client = Bigbluebutton::new(&bbb_url, &bbb_secret);
 
         let mut request = CreateMeetingRequest::new("14");
-        request.moderator_pw = Some("modp".to_string());
-        request.attendee_pw = Some("attep".to_string());
+        request.set_moderator_pw(Some("modp".to_string()));
+        request.set_attendee_pw(Some("attep".to_string()));
 
         let _ = client.create_meeting(&request).await;
 
@@ -35,12 +35,12 @@ mod test {
         let client = Bigbluebutton::new(&bbb_url, &bbb_secret);
 
         let mut request = CreateMeetingRequest::new("15");
-        request.moderator_pw = Some("modp".to_string());
-        request.attendee_pw = Some("attep".to_string());
+        request.set_moderator_pw(Some("modp".to_string()));
+        request.set_attendee_pw(Some("attep".to_string()));
 
         let mut request2 = CreateMeetingRequest::new("16");
-        request2.moderator_pw = Some("modp".to_string());
-        request2.attendee_pw = Some("attep".to_string());
+        request2.set_moderator_pw(Some("modp".to_string()));
+        request2.set_attendee_pw(Some("attep".to_string()));
 
         let _ = client.create_meeting(&request).await;
         let _ = client.create_meeting(&request2).await;

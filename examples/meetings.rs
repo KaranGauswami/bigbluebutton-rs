@@ -14,9 +14,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // create new meeting request
     let mut request = CreateMeetingRequest::new("12");
-    request.moderator_pw = Some("modp".to_string());
-    request.attendee_pw = Some("akarr".to_string());
-    request.record = Some(true);
+    request.set_moderator_pw(Some("modp".to_string()));
+    request.set_attendee_pw(Some("akarr".to_string()));
+    request.set_record(Some(true));
 
     // execute new meeting request
     let response = client.create_meeting(&request).await?;

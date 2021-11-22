@@ -20,11 +20,11 @@ mod test {
 
         let mut request = CreateMeetingRequest::new(&meeting_id);
 
-        request.attendee_pw = Some(attendee_pw.clone());
-        request.moderator_pw = Some(moderator_pw.clone());
-        request.voice_bridge = Some(voice_bridge.clone());
-        request.dial_number = Some(dial_number.clone());
-        request.duration = Some(duration.clone());
+        request.set_attendee_pw(Some(attendee_pw.clone()));
+        request.set_moderator_pw(Some(moderator_pw.clone()));
+        request.set_voice_bridge(Some(voice_bridge.clone()));
+        request.set_dial_number(Some(dial_number.clone()));
+        request.set_duration(Some(duration.clone()));
 
         let response = client
             .create_meeting(&request)
@@ -46,7 +46,7 @@ mod test {
         let client = Bigbluebutton::new(&bbb_url, &bbb_secret);
 
         let mut req = CreateMeetingRequest::new("2");
-        req.moderator_pw = Some("modp".to_string());
+        req.set_moderator_pw(Some("modp".to_string()));
         let _ = client.create_meeting(&req).await;
 
         let req = EndMeetingRequest::new("2", "modp");
@@ -57,9 +57,9 @@ mod test {
             .expect("Unable to parse EndMeetingResponse");
         println!("{:?}", response);
         assert_eq!(
-            response.return_code,
-            bigbluebutton::error::ResponseCode::SUCCESS
+            response.return_code(),
+            &bigbluebutton::error::ResponseCode::SUCCESS
         );
-        assert_eq!(response.message_key, "sentEndMeetingRequest".to_string());
+        assert_eq!(response.message_key(), "sentEndMeetingRequest");
     }
 }
