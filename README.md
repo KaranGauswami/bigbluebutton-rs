@@ -30,7 +30,7 @@ let params = vec![
     ("meetingID", "1"),
   ];
 
-let url = bbb.generate_url("join", params);
+let url = client.generate_url("join", params);
 
 println!("{}",url) // https://example.com/bigbluebutton/api/join?password=pass&fullName=name&meetingID=1&checksum=94e467c1b4b13f4452ca5d1deb9b7b74e1063aea55fe078139015a7d6311cfdf
 ```
@@ -50,7 +50,7 @@ async fn main() {
     request.moderator_pw = Some("modp".to_string());
     request.attandee_pw = Some("akarr".to_string());
 
-    let _response = bbb.create_meeting(&request).await;
+    let _response = client.create_meeting(&request).await;
 }
 ```
 
