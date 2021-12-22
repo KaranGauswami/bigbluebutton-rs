@@ -66,8 +66,7 @@ pub struct Bigbluebutton {
 impl Bigbluebutton {
     /// creates new BBB API Client
     pub fn new(url: impl ToString, salt: impl ToString) -> Self {
-        let mut new_url = url.to_string();
-        new_url.push_str("api/");
+        let new_url = format!("{}api/", url.to_string());
         Self {
             salt: salt.to_string(),
             url: new_url,
@@ -110,13 +109,11 @@ impl Bigbluebutton {
     {
         let url = self.create_api_url(api_path, request)?;
         let text_response = reqwest::get(&url).await?.text().await?;
-        let return_response;
         if text_response.contains("SUCCESS") {
-            return_response = Ok(serde_xml_rs::from_str::<T>(&text_response)?);
+            Ok(serde_xml_rs::from_str::<T>(&text_response)?)
         } else {
             let error = serde_xml_rs::from_str::<self::error::BBBError>(&text_response)?;
-            return_response = Err(anyhow::anyhow!("{}", error.message));
+            Err(anyhow::anyhow!("{}", error.message))
         }
-        return_response
     }
 }
